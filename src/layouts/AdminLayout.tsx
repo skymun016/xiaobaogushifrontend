@@ -92,7 +92,7 @@ export default function AdminLayout() {
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="hidden lg:flex items-center justify-center h-10 border-t border-sidebar-border text-sidebar-foreground/60 hover:text-sidebar-foreground"
+        className="hidden lg:flex items-center justify-center h-10 text-sidebar-foreground/60 hover:text-sidebar-foreground"
       >
         {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
       </button>

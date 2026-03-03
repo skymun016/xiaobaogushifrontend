@@ -73,7 +73,7 @@ const createTimeline = (status: OrderStatus, isApp: boolean): OrderTimeline[] =>
   }
   if (status !== OrderStatus.PENDING) {
     base.push({ time: '2026-02-25 10:30:00', title: '支付成功', description: '微信支付完成' });
-    base.push({ time: '2026-02-25 11:00:00', title: '录入物流成本', description: '预估物流成本 ¥15.00', operator: '管理员' });
+    base.push({ time: '2026-02-25 11:00:00', title: '录入物流成本', description: '预估物流成本 ¥50.00', operator: '管理员' });
   }
   if (status === OrderStatus.COMPLETED) {
     base.push({ time: '2026-02-28 14:00:00', title: '拣货完成', operator: '仓库李' });
@@ -89,11 +89,11 @@ export const mockOrders: Order[] = [
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
-      { id: 'oi1', productId: 'p1', productName: '有机黄瓜', skuCode: 'VEG-001', spec: '500g/袋', unit: '袋', quantity: 10, costPrice: 3.5, salePrice: 6.8 },
-      { id: 'oi2', productId: 'p2', productName: '红富士苹果', skuCode: 'FRT-001', spec: '1kg/袋', unit: '袋', quantity: 5, costPrice: 8.0, salePrice: 15.9 },
+      { id: 'oi1', productId: 'p1', productName: '封口机', skuCode: 'MC-001', spec: '台式/台', unit: '台', quantity: 2, costPrice: 680, salePrice: 1280 },
+      { id: 'oi2', productId: 'p4', productName: '红茶茶叶', skuCode: 'FM-001', spec: '500g/袋', unit: '袋', quantity: 5, costPrice: 35, salePrice: 68 },
     ],
-    totalSalePrice: 147.5, totalCostPrice: 75.0, estimatedLogisticsCost: 15.0,
-    estimatedProfit: 57.5, isApplication: false,
+    totalSalePrice: 2900, totalCostPrice: 1535, estimatedLogisticsCost: 50,
+    estimatedProfit: 1315, isApplication: false,
     createdAt: '2026-02-25 09:30:00', timeline: createTimeline(OrderStatus.PENDING, false),
   },
   {
@@ -101,12 +101,12 @@ export const mockOrders: Order[] = [
     status: OrderStatus.PROCESSING, paymentStatus: PaymentStatus.PAID,
     fulfillmentStatus: FulfillmentStatus.PICKING, procurementStatus: ProcurementAggStatus.READY,
     items: [
-      { id: 'oi3', productId: 'p3', productName: '散养土鸡蛋', skuCode: 'EGG-001', spec: '30枚/盒', unit: '盒', quantity: 3, costPrice: 18.0, salePrice: 32.0 },
-      { id: 'oi4', productId: 'p4', productName: '五花肉', skuCode: 'MEAT-001', spec: '500g/份', unit: '份', quantity: 8, costPrice: 15.0, salePrice: 28.8 },
-      { id: 'oi5', productId: 'p5', productName: '东北大米', skuCode: 'RICE-001', spec: '5kg/袋', unit: '袋', quantity: 2, costPrice: 22.0, salePrice: 39.9 },
+      { id: 'oi3', productId: 'p5', productName: '白砂糖', skuCode: 'FM-002', spec: '25kg/袋', unit: '袋', quantity: 3, costPrice: 85, salePrice: 128 },
+      { id: 'oi4', productId: 'p7', productName: '一次性杯子', skuCode: 'PM-001', spec: '500ml*1000个/箱', unit: '箱', quantity: 2, costPrice: 120, salePrice: 198 },
+      { id: 'oi5', productId: 'p8', productName: '吸管', skuCode: 'PM-002', spec: '5000支/箱', unit: '箱', quantity: 1, costPrice: 45, salePrice: 78 },
     ],
-    totalSalePrice: 406.2, totalCostPrice: 218.0, estimatedLogisticsCost: 25.0,
-    estimatedProfit: 163.2, isApplication: false,
+    totalSalePrice: 762, totalCostPrice: 420, estimatedLogisticsCost: 25,
+    estimatedProfit: 317, isApplication: false,
     createdAt: '2026-02-25 10:15:00', paidAt: '2026-02-25 10:30:00',
     timeline: createTimeline(OrderStatus.PROCESSING, false),
   },
@@ -115,11 +115,11 @@ export const mockOrders: Order[] = [
     status: OrderStatus.COMPLETED, paymentStatus: PaymentStatus.PAID,
     fulfillmentStatus: FulfillmentStatus.RECEIVED, procurementStatus: ProcurementAggStatus.CLOSED,
     items: [
-      { id: 'oi6', productId: 'p6', productName: '纯牛奶', skuCode: 'MILK-001', spec: '250ml*12', unit: '箱', quantity: 5, costPrice: 28.0, salePrice: 49.9 },
-      { id: 'oi7', productId: 'p7', productName: '小白菜', skuCode: 'VEG-002', spec: '300g/袋', unit: '袋', quantity: 20, costPrice: 2.0, salePrice: 4.5 },
+      { id: 'oi6', productId: 'p6', productName: '椰浆', skuCode: 'FM-003', spec: '1L/盒', unit: '盒', quantity: 10, costPrice: 12, salePrice: 22 },
+      { id: 'oi7', productId: 'p9', productName: '围裙', skuCode: 'ZB-001', spec: '均码/件', unit: '件', quantity: 5, costPrice: 15, salePrice: 35 },
     ],
-    totalSalePrice: 339.5, totalCostPrice: 180.0, estimatedLogisticsCost: 20.0,
-    actualLogisticsCost: 18.0, estimatedProfit: 139.5, settlementProfit: 141.5,
+    totalSalePrice: 395, totalCostPrice: 195, estimatedLogisticsCost: 20,
+    actualLogisticsCost: 18, estimatedProfit: 180, settlementProfit: 182,
     isApplication: false, createdAt: '2026-02-24 08:00:00', paidAt: '2026-02-24 08:15:00',
     timeline: createTimeline(OrderStatus.COMPLETED, false),
   },
@@ -129,12 +129,12 @@ export const mockOrders: Order[] = [
     auditStatus: AuditStatus.PENDING,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
-      { id: 'oi8', productId: 'p8', productName: '三文鱼片', skuCode: 'FISH-001', spec: '200g/盒', unit: '盒', quantity: 10, costPrice: 35.0, salePrice: 68.0 },
+      { id: 'oi8', productId: 'p2', productName: '制冰机', skuCode: 'MC-002', spec: '商用/台', unit: '台', quantity: 1, costPrice: 1500, salePrice: 2980 },
     ],
-    totalSalePrice: 680.0, totalCostPrice: 350.0, estimatedLogisticsCost: 0,
-    estimatedProfit: 330.0, isApplication: true,
+    totalSalePrice: 2980, totalCostPrice: 1500, estimatedLogisticsCost: 0,
+    estimatedProfit: 1480, isApplication: true,
     createdAt: '2026-02-26 20:30:00', timeline: createTimeline(OrderStatus.PENDING, true),
-    remark: '周末急需，请优先处理',
+    remark: '急需，请优先处理',
   },
   {
     id: 'o5', orderNo: 'APP20260226002', storeId: 's2', storeName: '海淀门店',
@@ -142,11 +142,11 @@ export const mockOrders: Order[] = [
     auditStatus: AuditStatus.APPROVED,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
-      { id: 'oi9', productId: 'p1', productName: '有机黄瓜', skuCode: 'VEG-001', spec: '500g/袋', unit: '袋', quantity: 15, costPrice: 3.5, salePrice: 6.8 },
-      { id: 'oi10', productId: 'p3', productName: '散养土鸡蛋', skuCode: 'EGG-001', spec: '30枚/盒', unit: '盒', quantity: 5, costPrice: 18.0, salePrice: 32.0 },
+      { id: 'oi9', productId: 'p3', productName: '果糖机', skuCode: 'MC-003', spec: '16格/台', unit: '台', quantity: 1, costPrice: 850, salePrice: 1680 },
+      { id: 'oi10', productId: 'p6', productName: '椰浆', skuCode: 'FM-003', spec: '1L/盒', unit: '盒', quantity: 20, costPrice: 12, salePrice: 22 },
     ],
-    totalSalePrice: 262.0, totalCostPrice: 142.5, estimatedLogisticsCost: 0,
-    estimatedProfit: 119.5, isApplication: true,
+    totalSalePrice: 2120, totalCostPrice: 1090, estimatedLogisticsCost: 0,
+    estimatedProfit: 1030, isApplication: true,
     createdAt: '2026-02-26 21:00:00',
     timeline: [
       { time: '2026-02-26 21:00:00', title: '提交申请订货', operator: '李四' },
@@ -158,10 +158,10 @@ export const mockOrders: Order[] = [
     status: OrderStatus.CANCELLED, paymentStatus: PaymentStatus.REFUNDED,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.CLOSED,
     items: [
-      { id: 'oi11', productId: 'p4', productName: '五花肉', skuCode: 'MEAT-001', spec: '500g/份', unit: '份', quantity: 3, costPrice: 15.0, salePrice: 28.8 },
+      { id: 'oi11', productId: 'p10', productName: '品牌贴纸', skuCode: 'ZB-002', spec: '100张/卷', unit: '卷', quantity: 10, costPrice: 8, salePrice: 18 },
     ],
-    totalSalePrice: 86.4, totalCostPrice: 45.0, estimatedLogisticsCost: 10.0,
-    estimatedProfit: 31.4, isApplication: false,
+    totalSalePrice: 180, totalCostPrice: 80, estimatedLogisticsCost: 10,
+    estimatedProfit: 90, isApplication: false,
     createdAt: '2026-02-25 14:00:00',
     timeline: [
       { time: '2026-02-25 14:00:00', title: '创建订单', operator: '王五' },
@@ -191,13 +191,13 @@ export interface PurchaseOrder {
 
 export const mockPurchaseOrders: PurchaseOrder[] = [
   {
-    id: 'po1', poNo: 'PO20260225001', supplierId: 'sup1', supplierName: '绿源农业',
+    id: 'po1', poNo: 'PO20260225001', supplierId: 'sup5', supplierName: '蒙源乳业',
     status: PurchaseOrderStatus.RECEIPTED,
     sourceOrderNos: ['ORD20260224001'],
     items: [
-      { productName: '小白菜', skuCode: 'VEG-002', quantity: 20, unit: '袋', costPrice: 2.0 },
+      { productName: '椰浆', skuCode: 'FM-003', quantity: 10, unit: '盒', costPrice: 12 },
     ],
-    totalAmount: 40.0, eta: '2026-02-27', receiptNo: 'REC-001',
+    totalAmount: 120, eta: '2026-02-27', receiptNo: 'REC-001',
     createdAt: '2026-02-24 12:00:00',
     timeline: [
       { time: '2026-02-24 12:00:00', title: '采购单创建' },
@@ -207,13 +207,14 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     ],
   },
   {
-    id: 'po2', poNo: 'PO20260225002', supplierId: 'sup3', supplierName: '鑫源肉业',
+    id: 'po2', poNo: 'PO20260225002', supplierId: 'sup1', supplierName: '绿源农业',
     status: PurchaseOrderStatus.SENT,
     sourceOrderNos: ['ORD20260225002'],
     items: [
-      { productName: '五花肉', skuCode: 'MEAT-001', quantity: 8, unit: '份', costPrice: 15.0 },
+      { productName: '一次性杯子', skuCode: 'PM-001', quantity: 2, unit: '箱', costPrice: 120 },
+      { productName: '吸管', skuCode: 'PM-002', quantity: 1, unit: '箱', costPrice: 45 },
     ],
-    totalAmount: 120.0, eta: '2026-02-28',
+    totalAmount: 285, eta: '2026-02-28',
     createdAt: '2026-02-25 14:00:00',
     timeline: [
       { time: '2026-02-25 14:00:00', title: '采购单创建' },
@@ -226,10 +227,10 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     status: PurchaseOrderStatus.ABNORMAL,
     sourceOrderNos: ['ORD20260225001'],
     items: [
-      { productName: '有机黄瓜', skuCode: 'VEG-001', quantity: 10, unit: '袋', costPrice: 3.5 },
+      { productName: '封口机', skuCode: 'MC-001', quantity: 2, unit: '台', costPrice: 680 },
     ],
-    totalAmount: 35.0, eta: '2026-02-28',
-    abnormalReason: '供应商库存不足，仅能供应5袋',
+    totalAmount: 1360, eta: '2026-02-28',
+    abnormalReason: '供应商库存不足，仅能供应1台',
     createdAt: '2026-02-25 14:30:00',
     timeline: [
       { time: '2026-02-25 14:30:00', title: '采购单创建' },
@@ -238,13 +239,13 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     ],
   },
   {
-    id: 'po4', poNo: 'PO20260225004', supplierId: 'sup5', supplierName: '蒙源乳业',
+    id: 'po4', poNo: 'PO20260225004', supplierId: 'sup4', supplierName: '北方粮仓',
     status: PurchaseOrderStatus.RECEIPTED,
     sourceOrderNos: ['ORD20260224001'],
     items: [
-      { productName: '纯牛奶', skuCode: 'MILK-001', quantity: 5, unit: '箱', costPrice: 28.0 },
+      { productName: '围裙', skuCode: 'ZB-001', quantity: 5, unit: '件', costPrice: 15 },
     ],
-    totalAmount: 140.0, eta: '2026-02-27', receiptNo: 'REC-002',
+    totalAmount: 75, eta: '2026-02-27', receiptNo: 'REC-002',
     createdAt: '2026-02-24 12:30:00',
     timeline: [
       { time: '2026-02-24 12:30:00', title: '采购单创建' },
@@ -270,12 +271,12 @@ export interface InventoryRecord {
 }
 
 export const mockInventoryRecords: InventoryRecord[] = [
-  { id: 'inv1', type: 'in', docNo: 'IN20260226001', productName: '小白菜', skuCode: 'VEG-002', quantity: 50, unit: '袋', operator: '仓库李', createdAt: '2026-02-26 10:00:00', remark: '采购入库' },
-  { id: 'inv2', type: 'in', docNo: 'IN20260226002', productName: '纯牛奶', skuCode: 'MILK-001', quantity: 30, unit: '箱', operator: '仓库李', createdAt: '2026-02-26 11:00:00', remark: '采购入库' },
-  { id: 'inv3', type: 'out', docNo: 'OUT20260228001', productName: '纯牛奶', skuCode: 'MILK-001', quantity: 5, unit: '箱', operator: '仓库李', relatedOrderNo: 'ORD20260224001', createdAt: '2026-02-28 14:00:00', remark: '订单出库' },
-  { id: 'inv4', type: 'out', docNo: 'OUT20260228002', productName: '小白菜', skuCode: 'VEG-002', quantity: 20, unit: '袋', operator: '仓库李', relatedOrderNo: 'ORD20260224001', createdAt: '2026-02-28 14:30:00', remark: '订单出库' },
-  { id: 'inv5', type: 'in', docNo: 'IN20260227001', productName: '有机黄瓜', skuCode: 'VEG-001', quantity: 100, unit: '袋', operator: '仓库李', createdAt: '2026-02-27 09:00:00', remark: '采购入库' },
-  { id: 'inv6', type: 'in', docNo: 'IN20260227002', productName: '五花肉', skuCode: 'MEAT-001', quantity: 20, unit: '份', operator: '仓库张', createdAt: '2026-02-27 10:00:00', remark: '采购入库' },
+  { id: 'inv1', type: 'in', docNo: 'IN20260226001', productName: '椰浆', skuCode: 'FM-003', quantity: 30, unit: '盒', operator: '仓库李', createdAt: '2026-02-26 10:00:00', remark: '采购入库' },
+  { id: 'inv2', type: 'in', docNo: 'IN20260226002', productName: '围裙', skuCode: 'ZB-001', quantity: 20, unit: '件', operator: '仓库李', createdAt: '2026-02-26 11:00:00', remark: '采购入库' },
+  { id: 'inv3', type: 'out', docNo: 'OUT20260228001', productName: '椰浆', skuCode: 'FM-003', quantity: 10, unit: '盒', operator: '仓库李', relatedOrderNo: 'ORD20260224001', createdAt: '2026-02-28 14:00:00', remark: '订单出库' },
+  { id: 'inv4', type: 'out', docNo: 'OUT20260228002', productName: '围裙', skuCode: 'ZB-001', quantity: 5, unit: '件', operator: '仓库李', relatedOrderNo: 'ORD20260224001', createdAt: '2026-02-28 14:30:00', remark: '订单出库' },
+  { id: 'inv5', type: 'in', docNo: 'IN20260227001', productName: '封口机', skuCode: 'MC-001', quantity: 5, unit: '台', operator: '仓库李', createdAt: '2026-02-27 09:00:00', remark: '采购入库' },
+  { id: 'inv6', type: 'in', docNo: 'IN20260227002', productName: '白砂糖', skuCode: 'FM-002', quantity: 50, unit: '袋', operator: '仓库张', createdAt: '2026-02-27 10:00:00', remark: '采购入库' },
 ];
 
 // ============ Fulfillment Tasks ============
@@ -299,8 +300,8 @@ export const mockFulfillmentTasks: FulfillmentTask[] = [
     id: 'ft1', taskNo: 'FT20260228001', orderNo: 'ORD20260224001', storeName: '朝阳门店',
     status: FulfillmentStatus.RECEIVED,
     items: [
-      { productName: '纯牛奶', quantity: 5, unit: '箱', picked: true },
-      { productName: '小白菜', quantity: 20, unit: '袋', picked: true },
+      { productName: '椰浆', quantity: 10, unit: '盒', picked: true },
+      { productName: '围裙', quantity: 5, unit: '件', picked: true },
     ],
     operator: '仓库李', createdAt: '2026-02-28 13:00:00',
     pickedAt: '2026-02-28 14:00:00', shippedAt: '2026-02-28 16:00:00', receivedAt: '2026-03-01 10:00:00',
@@ -309,9 +310,9 @@ export const mockFulfillmentTasks: FulfillmentTask[] = [
     id: 'ft2', taskNo: 'FT20260301001', orderNo: 'ORD20260225002', storeName: '海淀门店',
     status: FulfillmentStatus.PICKING,
     items: [
-      { productName: '散养土鸡蛋', quantity: 3, unit: '盒', picked: true },
-      { productName: '五花肉', quantity: 8, unit: '份', picked: false },
-      { productName: '东北大米', quantity: 2, unit: '袋', picked: false },
+      { productName: '白砂糖', quantity: 3, unit: '袋', picked: true },
+      { productName: '一次性杯子', quantity: 2, unit: '箱', picked: false },
+      { productName: '吸管', quantity: 1, unit: '箱', picked: false },
     ],
     operator: '仓库张', createdAt: '2026-03-01 08:00:00',
   },
@@ -319,11 +320,11 @@ export const mockFulfillmentTasks: FulfillmentTask[] = [
     id: 'ft3', taskNo: 'FT20260301002', orderNo: 'ORD20260225001', storeName: '朝阳门店',
     status: FulfillmentStatus.ABNORMAL,
     items: [
-      { productName: '有机黄瓜', quantity: 10, unit: '袋', picked: true },
-      { productName: '红富士苹果', quantity: 5, unit: '袋', picked: true },
+      { productName: '封口机', quantity: 2, unit: '台', picked: true },
+      { productName: '红茶茶叶', quantity: 5, unit: '袋', picked: true },
     ],
     operator: '仓库李', createdAt: '2026-03-01 09:00:00',
-    abnormalReason: '有机黄瓜实际到货仅5袋，与采购单不符',
+    abnormalReason: '封口机实际到货仅1台，与采购单不符',
   },
 ];
 
@@ -340,9 +341,9 @@ export interface PaymentRecord {
 }
 
 export const mockPaymentRecords: PaymentRecord[] = [
-  { id: 'pay1', orderNo: 'ORD20260224001', storeName: '朝阳门店', amount: 339.50, method: 'wechat', transactionNo: 'WX20260224001', status: 'success', paidAt: '2026-02-24 08:15:00' },
-  { id: 'pay2', orderNo: 'ORD20260225002', storeName: '海淀门店', amount: 406.20, method: 'wechat', transactionNo: 'WX20260225001', status: 'success', paidAt: '2026-02-25 10:30:00' },
-  { id: 'pay3', orderNo: 'ORD20260225003', storeName: '西城门店', amount: 86.40, method: 'wechat', transactionNo: 'WX20260225002', status: 'refunded', paidAt: '2026-02-25 14:10:00' },
+  { id: 'pay1', orderNo: 'ORD20260224001', storeName: '朝阳门店', amount: 395, method: 'wechat', transactionNo: 'WX20260224001', status: 'success', paidAt: '2026-02-24 08:15:00' },
+  { id: 'pay2', orderNo: 'ORD20260225002', storeName: '海淀门店', amount: 762, method: 'wechat', transactionNo: 'WX20260225001', status: 'success', paidAt: '2026-02-25 10:30:00' },
+  { id: 'pay3', orderNo: 'ORD20260225003', storeName: '西城门店', amount: 180, method: 'wechat', transactionNo: 'WX20260225002', status: 'refunded', paidAt: '2026-02-25 14:10:00' },
 ];
 
 export interface RefundRecord {
@@ -357,7 +358,7 @@ export interface RefundRecord {
 }
 
 export const mockRefunds: RefundRecord[] = [
-  { id: 'ref1', orderNo: 'ORD20260225003', storeName: '西城门店', amount: 86.40, reason: '门店取消订单', status: 'completed', createdAt: '2026-02-25 16:00:00', completedAt: '2026-02-25 16:30:00' },
+  { id: 'ref1', orderNo: 'ORD20260225003', storeName: '西城门店', amount: 180, reason: '门店取消订单', status: 'completed', createdAt: '2026-02-25 16:00:00', completedAt: '2026-02-25 16:30:00' },
 ];
 
 // ============ Notification ============
@@ -390,10 +391,10 @@ export interface NotificationLog {
 
 export const mockNotificationLogs: NotificationLog[] = [
   { id: 'nl1', templateName: '订单创建通知', target: '朝阳门店-张三', channel: 'wechat', status: 'sent', content: '您的订单 ORD20260225001 已创建，请及时支付。', sentAt: '2026-02-25 09:30:05' },
-  { id: 'nl2', templateName: '支付成功通知', target: '海淀门店-李四', channel: 'wechat', status: 'sent', content: '订单 ORD20260225002 支付成功，金额 ¥406.20。', sentAt: '2026-02-25 10:30:10' },
+  { id: 'nl2', templateName: '支付成功通知', target: '海淀门店-李四', channel: 'wechat', status: 'sent', content: '订单 ORD20260225002 支付成功，金额 ¥762.00。', sentAt: '2026-02-25 10:30:10' },
   { id: 'nl3', templateName: '采购异常通知', target: '管理员', channel: 'sms', status: 'sent', content: '采购单 PO20260225003 出现异常：供应商库存不足。', sentAt: '2026-02-26 09:01:00' },
   { id: 'nl4', templateName: '发货通知', target: '朝阳门店-张三', channel: 'wechat', status: 'sent', content: '您的订单 ORD20260224001 已发货，请注意查收。', sentAt: '2026-02-28 16:00:05' },
-  { id: 'nl5', templateName: '库存预警通知', target: '管理员', channel: 'email', status: 'failed', content: '商品 三文鱼片 库存低于安全线，当前库存 40。', sentAt: '2026-02-28 08:00:00' },
+  { id: 'nl5', templateName: '库存预警通知', target: '管理员', channel: 'email', status: 'failed', content: '商品 果糖机 库存低于安全线，当前库存 10。', sentAt: '2026-02-28 08:00:00' },
 ];
 
 // ============ System Users & Roles ============
@@ -442,10 +443,10 @@ export interface AuditLog {
 
 export const mockAuditLogs: AuditLog[] = [
   { id: 'al1', operator: '超级管理员', action: '审核通过', target: '申请订货 APP20260226002', detail: '审核通过海淀门店的申请订货', ip: '192.168.1.100', createdAt: '2026-02-27 09:00:00' },
-  { id: 'al2', operator: '仓库李', action: '入库操作', target: '入库单 IN20260226001', detail: '小白菜入库50袋', ip: '192.168.1.101', createdAt: '2026-02-26 10:00:00' },
+  { id: 'al2', operator: '仓库李', action: '入库操作', target: '入库单 IN20260226001', detail: '椰浆入库30盒', ip: '192.168.1.101', createdAt: '2026-02-26 10:00:00' },
   { id: 'al3', operator: '超级管理员', action: '录入物流成本', target: '订单 ORD20260225002', detail: '录入预估物流成本¥25.00', ip: '192.168.1.100', createdAt: '2026-02-25 11:00:00' },
   { id: 'al4', operator: '仓库李', action: '拣货完成', target: '出库任务 FT20260228001', detail: '朝阳门店订单拣货完成', ip: '192.168.1.101', createdAt: '2026-02-28 14:00:00' },
-  { id: 'al5', operator: '财务王', action: '退款处理', target: '订单 ORD20260225003', detail: '西城门店订单退款¥86.40', ip: '192.168.1.102', createdAt: '2026-02-25 16:30:00' },
+  { id: 'al5', operator: '财务王', action: '退款处理', target: '订单 ORD20260225003', detail: '西城门店订单退款¥180.00', ip: '192.168.1.102', createdAt: '2026-02-25 16:30:00' },
 ];
 
 // ============ Dashboard Stats ============
@@ -470,20 +471,20 @@ export const mockRevenueData = [
 
 // ============ Finance Report Data ============
 export const mockProfitByProduct = [
-  { productName: '三文鱼片', revenue: 6800, cost: 3500, profit: 3300, margin: 48.5 },
-  { productName: '纯牛奶', revenue: 4990, cost: 2800, profit: 2190, margin: 43.9 },
-  { productName: '东北大米', revenue: 3990, cost: 2200, profit: 1790, margin: 44.9 },
-  { productName: '五花肉', revenue: 2880, cost: 1500, profit: 1380, margin: 47.9 },
-  { productName: '散养土鸡蛋', revenue: 3200, cost: 1800, profit: 1400, margin: 43.8 },
-  { productName: '红富士苹果', revenue: 1590, cost: 800, profit: 790, margin: 49.7 },
-  { productName: '有机黄瓜', revenue: 680, cost: 350, profit: 330, margin: 48.5 },
-  { productName: '小白菜', revenue: 900, cost: 400, profit: 500, margin: 55.6 },
+  { productName: '制冰机', revenue: 8940, cost: 4500, profit: 4440, margin: 49.7 },
+  { productName: '封口机', revenue: 5120, cost: 2720, profit: 2400, margin: 46.9 },
+  { productName: '果糖机', revenue: 3360, cost: 1700, profit: 1660, margin: 49.4 },
+  { productName: '红茶茶叶', revenue: 2720, cost: 1400, profit: 1320, margin: 48.5 },
+  { productName: '白砂糖', revenue: 1920, cost: 1275, profit: 645, margin: 33.6 },
+  { productName: '一次性杯子', revenue: 1980, cost: 1200, profit: 780, margin: 39.4 },
+  { productName: '椰浆', revenue: 1100, cost: 600, profit: 500, margin: 45.5 },
+  { productName: '围裙', revenue: 700, cost: 300, profit: 400, margin: 57.1 },
 ];
 
 export const mockProfitByStore = [
-  { storeName: '朝阳门店', orderCount: 5, revenue: 5870, cost: 3100, logistics: 53, profit: 2717, margin: 46.3 },
-  { storeName: '海淀门店', orderCount: 4, revenue: 6682, cost: 3605, logistics: 50, profit: 3027, margin: 45.3 },
-  { storeName: '西城门店', orderCount: 3, revenue: 7664, cost: 3950, logistics: 30, profit: 3684, margin: 48.1 },
+  { storeName: '朝阳门店', orderCount: 5, revenue: 8700, cost: 4500, logistics: 68, profit: 4132, margin: 47.5 },
+  { storeName: '海淀门店', orderCount: 4, revenue: 7620, cost: 4200, logistics: 50, profit: 3370, margin: 44.2 },
+  { storeName: '西城门店', orderCount: 3, revenue: 5960, cost: 3100, logistics: 30, profit: 2830, margin: 47.5 },
 ];
 
 // ============ Helpers ============

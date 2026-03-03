@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/lib/store';
+import { useAuth } from '@/hooks/useAuth';
 import {
   LayoutDashboard, Package, Warehouse, ShoppingCart, Users, FileText,
   DollarSign, Bell, Settings, LogOut, Menu, Smartphone
@@ -26,7 +26,8 @@ export default function AdminLayout() {
   const [collapsed, setCollapsed] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { userName, logout } = useAuthStore();
+  const { profile, signOut } = useAuth();
+  const navigate = useNavigate();
   const hoverTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const handleMouseEnter = useCallback(() => {
@@ -78,16 +79,16 @@ export default function AdminLayout() {
       <div className="p-4">
         <div className={cn('flex items-center', collapsed ? 'justify-center' : 'gap-3')}>
           <div className="w-8 h-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-sm font-medium shrink-0">
-            {userName?.[0] || 'A'}
+            {(profile?.real_name || '管理')[0]}
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{userName || '管理员'}</p>
+              <p className="text-sm font-medium truncate">{profile?.real_name || '管理员'}</p>
               <p className="text-xs text-sidebar-foreground/60">管理后台</p>
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:text-sidebar-accent-foreground" onClick={logout}>
+            <Button variant="ghost" size="icon" className="text-sidebar-foreground hover:text-sidebar-accent-foreground" onClick={() => { signOut(); navigate('/admin/login'); }}>
               <LogOut className="w-4 h-4" />
             </Button>
           )}

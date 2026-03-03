@@ -9,8 +9,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
-import { Settings, Users, Shield, ClipboardList, Plus } from 'lucide-react';
+import { Shield, Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import CloudStorageConfig from './CloudStorageConfig';
 
 export default function SettingsCenter() {
   const [tab, setTab] = useState('users');
@@ -21,7 +22,7 @@ export default function SettingsCenter() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">系统设置</h1>
-        <p className="text-muted-foreground">用户管理、角色权限、参数配置、审计日志</p>
+        <p className="text-muted-foreground">用户管理、角色权限、参数配置、云存储、审计日志</p>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
@@ -29,6 +30,7 @@ export default function SettingsCenter() {
           <TabsTrigger value="users">用户管理</TabsTrigger>
           <TabsTrigger value="roles">角色权限</TabsTrigger>
           <TabsTrigger value="config">参数配置</TabsTrigger>
+          <TabsTrigger value="storage">云存储</TabsTrigger>
           <TabsTrigger value="audit">审计日志</TabsTrigger>
         </TabsList>
 
@@ -150,6 +152,11 @@ export default function SettingsCenter() {
               ))}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Cloud Storage */}
+        <TabsContent value="storage" className="mt-4">
+          <CloudStorageConfig />
         </TabsContent>
 
         {/* Audit */}

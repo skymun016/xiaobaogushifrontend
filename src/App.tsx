@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/hooks/useAuth";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 import EntryPage from "./pages/EntryPage";
 import AdminLogin from "./pages/admin/Login";
@@ -31,59 +33,75 @@ import ManagerApplications from "./pages/manager/ManagerApplications";
 import ManagerIssues from "./pages/manager/ManagerIssues";
 import ManagerProfile from "./pages/manager/ManagerProfile";
 import MobileLogin from "./pages/mobile/MobileLogin";
+import InitialSetup from "./pages/admin/InitialSetup";
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Entry */}
-          <Route path="/" element={<EntryPage />} />
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            {/* Entry */}
+            <Route path="/" element={<EntryPage />} />
+            <Route path="/setup" element={<InitialSetup />} />
 
-          {/* Admin */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="orders" element={<OrderList />} />
-            <Route path="orders/:id" element={<OrderDetail />} />
-            <Route path="products" element={<ProductList />} />
-            <Route path="inventory" element={<InventoryCenter />} />
-            <Route path="suppliers" element={<SupplierCenter />} />
-            <Route path="procurement" element={<ProcurementCenter />} />
-            <Route path="finance" element={<FinanceCenter />} />
-            <Route path="notifications" element={<NotificationCenter />} />
-            <Route path="settings" element={<SettingsCenter />} />
-            <Route path="miniprogram" element={<MiniProgramCenter />} />
-          </Route>
+            {/* Admin */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<Dashboard />} />
+              <Route path="orders" element={<OrderList />} />
+              <Route path="orders/:id" element={<OrderDetail />} />
+              <Route path="products" element={<ProductList />} />
+              <Route path="inventory" element={<InventoryCenter />} />
+              <Route path="suppliers" element={<SupplierCenter />} />
+              <Route path="procurement" element={<ProcurementCenter />} />
+              <Route path="finance" element={<FinanceCenter />} />
+              <Route path="notifications" element={<NotificationCenter />} />
+              <Route path="settings" element={<SettingsCenter />} />
+              <Route path="miniprogram" element={<MiniProgramCenter />} />
+            </Route>
 
-          {/* Mobile login */}
-          <Route path="/mobile/login" element={<MobileLogin />} />
+            {/* Mobile login */}
+            <Route path="/mobile/login" element={<MobileLogin />} />
 
-          {/* Store mobile */}
-          <Route path="/store" element={<MobileLayout />}>
-            <Route index element={<StoreHome />} />
-            <Route path="categories" element={<StoreCategories />} />
-            <Route path="cart" element={<StoreCart />} />
-            <Route path="orders" element={<StoreOrders />} />
-            <Route path="orders/:id" element={<StoreOrderDetail />} />
-            <Route path="profile" element={<StoreProfile />} />
-          </Route>
+            {/* Store mobile */}
+            <Route path="/store" element={
+              <ProtectedRoute requiredRole="store" redirectTo="/mobile/login">
+                <MobileLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<StoreHome />} />
+              <Route path="categories" element={<StoreCategories />} />
+              <Route path="cart" element={<StoreCart />} />
+              <Route path="orders" element={<StoreOrders />} />
+              <Route path="orders/:id" element={<StoreOrderDetail />} />
+              <Route path="profile" element={<StoreProfile />} />
+            </Route>
 
-          {/* Manager mobile */}
-          <Route path="/manager" element={<ManagerLayout />}>
-            <Route index element={<ManagerDashboard />} />
-            <Route path="applications" element={<ManagerApplications />} />
-            <Route path="issues" element={<ManagerIssues />} />
-            <Route path="profile" element={<ManagerProfile />} />
-          </Route>
+            {/* Manager mobile */}
+            <Route path="/manager" element={
+              <ProtectedRoute requiredRole="manager" redirectTo="/mobile/login">
+                <ManagerLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<ManagerDashboard />} />
+              <Route path="applications" element={<ManagerApplications />} />
+              <Route path="issues" element={<ManagerIssues />} />
+              <Route path="profile" element={<ManagerProfile />} />
+            </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

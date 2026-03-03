@@ -21,14 +21,10 @@ export interface Category {
 }
 
 export const mockCategories: Category[] = [
-  { id: 'c1', name: '蔬菜', sort: 1, productCount: 2 },
-  { id: 'c2', name: '水果', sort: 2, productCount: 1 },
-  { id: 'c3', name: '禽蛋', sort: 3, productCount: 1 },
-  { id: 'c4', name: '肉类', sort: 4, productCount: 1 },
-  { id: 'c5', name: '粮油', sort: 5, productCount: 1 },
-  { id: 'c6', name: '乳品', sort: 6, productCount: 1 },
-  { id: 'c7', name: '水产', sort: 7, productCount: 1 },
-  { id: 'c8', name: '调味品', sort: 8, productCount: 0 },
+  { id: 'c1', name: '机器', sort: 1, productCount: 3 },
+  { id: 'c2', name: '食材', sort: 2, productCount: 3 },
+  { id: 'c3', name: '包材', sort: 3, productCount: 2 },
+  { id: 'c4', name: '周边', sort: 4, productCount: 2 },
 ];
 
 // ============ Suppliers ============
@@ -55,16 +51,16 @@ export const mockSuppliers: Supplier[] = [
 
 // ============ Products ============
 export const mockProducts: Product[] = [
-  { id: 'p1', name: '有机黄瓜', categoryId: 'c1', categoryName: '蔬菜', skuCode: 'VEG-001', spec: '500g/袋', unit: '袋', barcode: '6901234560001', costPrice: 3.5, salePrice: 6.8, isOnSale: true, defaultSupplierId: 'sup1', defaultSupplierName: '绿源农业', imageUrl: '', stock: 200 },
-  { id: 'p2', name: '红富士苹果', categoryId: 'c2', categoryName: '水果', skuCode: 'FRT-001', spec: '1kg/袋', unit: '袋', barcode: '6901234560002', costPrice: 8.0, salePrice: 15.9, isOnSale: true, defaultSupplierId: 'sup2', defaultSupplierName: '鲜果源', imageUrl: '', stock: 150 },
-  { id: 'p3', name: '散养土鸡蛋', categoryId: 'c3', categoryName: '禽蛋', skuCode: 'EGG-001', spec: '30枚/盒', unit: '盒', barcode: '6901234560003', costPrice: 18.0, salePrice: 32.0, isOnSale: true, defaultSupplierId: 'sup1', defaultSupplierName: '绿源农业', imageUrl: '', stock: 80 },
-  { id: 'p4', name: '五花肉', categoryId: 'c4', categoryName: '肉类', skuCode: 'MEAT-001', spec: '500g/份', unit: '份', barcode: '6901234560004', costPrice: 15.0, salePrice: 28.8, isOnSale: true, defaultSupplierId: 'sup3', defaultSupplierName: '鑫源肉业', imageUrl: '', stock: 60 },
-  { id: 'p5', name: '东北大米', categoryId: 'c5', categoryName: '粮油', skuCode: 'RICE-001', spec: '5kg/袋', unit: '袋', barcode: '6901234560005', costPrice: 22.0, salePrice: 39.9, isOnSale: true, defaultSupplierId: 'sup4', defaultSupplierName: '北方粮仓', imageUrl: '', stock: 300 },
-  { id: 'p6', name: '纯牛奶', categoryId: 'c6', categoryName: '乳品', skuCode: 'MILK-001', spec: '250ml*12', unit: '箱', barcode: '6901234560006', costPrice: 28.0, salePrice: 49.9, isOnSale: true, defaultSupplierId: 'sup5', defaultSupplierName: '蒙源乳业', imageUrl: '', stock: 120 },
-  { id: 'p7', name: '小白菜', categoryId: 'c1', categoryName: '蔬菜', skuCode: 'VEG-002', spec: '300g/袋', unit: '袋', barcode: '6901234560007', costPrice: 2.0, salePrice: 4.5, isOnSale: true, defaultSupplierId: 'sup1', defaultSupplierName: '绿源农业', imageUrl: '', stock: 180 },
-  { id: 'p8', name: '三文鱼片', categoryId: 'c7', categoryName: '水产', skuCode: 'FISH-001', spec: '200g/盒', unit: '盒', barcode: '6901234560008', costPrice: 35.0, salePrice: 68.0, isOnSale: true, defaultSupplierId: 'sup6', defaultSupplierName: '海之鲜', imageUrl: '', stock: 40 },
-  { id: 'p9', name: '花生油', categoryId: 'c5', categoryName: '粮油', skuCode: 'OIL-001', spec: '5L/桶', unit: '桶', barcode: '6901234560009', costPrice: 45.0, salePrice: 79.9, isOnSale: true, defaultSupplierId: 'sup4', defaultSupplierName: '北方粮仓', imageUrl: '', stock: 90 },
-  { id: 'p10', name: '里脊肉', categoryId: 'c4', categoryName: '肉类', skuCode: 'MEAT-002', spec: '500g/份', unit: '份', barcode: '6901234560010', costPrice: 18.0, salePrice: 35.0, isOnSale: false, defaultSupplierId: 'sup3', defaultSupplierName: '鑫源肉业', imageUrl: '', stock: 0 },
+  { id: 'p1', name: '封口机', categoryId: 'c1', categoryName: '机器', skuCode: 'MC-001', spec: '台式/台', unit: '台', barcode: '6901234560001', costPrice: 680, salePrice: 1280, isOnSale: true, defaultSupplierId: 'sup1', defaultSupplierName: '绿源农业', imageUrl: '', stock: 20 },
+  { id: 'p2', name: '制冰机', categoryId: 'c1', categoryName: '机器', skuCode: 'MC-002', spec: '商用/台', unit: '台', barcode: '6901234560002', costPrice: 1500, salePrice: 2980, isOnSale: true, defaultSupplierId: 'sup2', defaultSupplierName: '鲜果源', imageUrl: '', stock: 15 },
+  { id: 'p3', name: '果糖机', categoryId: 'c1', categoryName: '机器', skuCode: 'MC-003', spec: '16格/台', unit: '台', barcode: '6901234560003', costPrice: 850, salePrice: 1680, isOnSale: true, defaultSupplierId: 'sup1', defaultSupplierName: '绿源农业', imageUrl: '', stock: 10 },
+  { id: 'p4', name: '红茶茶叶', categoryId: 'c2', categoryName: '食材', skuCode: 'FM-001', spec: '500g/袋', unit: '袋', barcode: '6901234560004', costPrice: 35, salePrice: 68, isOnSale: true, defaultSupplierId: 'sup3', defaultSupplierName: '鑫源肉业', imageUrl: '', stock: 200 },
+  { id: 'p5', name: '白砂糖', categoryId: 'c2', categoryName: '食材', skuCode: 'FM-002', spec: '25kg/袋', unit: '袋', barcode: '6901234560005', costPrice: 85, salePrice: 128, isOnSale: true, defaultSupplierId: 'sup4', defaultSupplierName: '北方粮仓', imageUrl: '', stock: 300 },
+  { id: 'p6', name: '椰浆', categoryId: 'c2', categoryName: '食材', skuCode: 'FM-003', spec: '1L/盒', unit: '盒', barcode: '6901234560006', costPrice: 12, salePrice: 22, isOnSale: true, defaultSupplierId: 'sup5', defaultSupplierName: '蒙源乳业', imageUrl: '', stock: 150 },
+  { id: 'p7', name: '一次性杯子', categoryId: 'c3', categoryName: '包材', skuCode: 'PM-001', spec: '500ml*1000个/箱', unit: '箱', barcode: '6901234560007', costPrice: 120, salePrice: 198, isOnSale: true, defaultSupplierId: 'sup1', defaultSupplierName: '绿源农业', imageUrl: '', stock: 80 },
+  { id: 'p8', name: '吸管', categoryId: 'c3', categoryName: '包材', skuCode: 'PM-002', spec: '5000支/箱', unit: '箱', barcode: '6901234560008', costPrice: 45, salePrice: 78, isOnSale: true, defaultSupplierId: 'sup6', defaultSupplierName: '海之鲜', imageUrl: '', stock: 60 },
+  { id: 'p9', name: '围裙', categoryId: 'c4', categoryName: '周边', skuCode: 'ZB-001', spec: '均码/件', unit: '件', barcode: '6901234560009', costPrice: 15, salePrice: 35, isOnSale: true, defaultSupplierId: 'sup4', defaultSupplierName: '北方粮仓', imageUrl: '', stock: 100 },
+  { id: 'p10', name: '品牌贴纸', categoryId: 'c4', categoryName: '周边', skuCode: 'ZB-002', spec: '100张/卷', unit: '卷', barcode: '6901234560010', costPrice: 8, salePrice: 18, isOnSale: false, defaultSupplierId: 'sup3', defaultSupplierName: '鑫源肉业', imageUrl: '', stock: 0 },
 ];
 
 // ============ Orders ============

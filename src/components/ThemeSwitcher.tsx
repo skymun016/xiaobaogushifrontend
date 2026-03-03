@@ -42,9 +42,9 @@ const presets: ThemePreset[] = [
       accent: '24 95% 58%',
       sidebarBg: '172 60% 18%',
       sidebarFg: '172 20% 92%',
-      background: '170 28% 85%',
+      background: '170 25% 89%',
     },
-    preview: { bg: '#b8d4cf', sidebar: '#123d36', accent: '#f09836' },
+    preview: { bg: '#c8ddd9', sidebar: '#123d36', accent: '#f09836' },
   },
   {
     id: 'indigo',

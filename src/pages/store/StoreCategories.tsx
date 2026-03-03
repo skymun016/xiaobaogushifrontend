@@ -23,7 +23,11 @@ export default function StoreCategories() {
   });
 
   return (
-    <div className="flex h-full bg-muted">
+    <div className="flex flex-col h-full bg-muted">
+      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-3 sticky top-0 z-20">
+        <h1 className="text-lg font-bold">商品分类</h1>
+      </div>
+      <div className="flex flex-1 overflow-hidden">
       {/* Category sidebar */}
       <div className="w-[88px] bg-card border-r border-border/50 shrink-0 overflow-y-auto">
         {categories.map(cat => (
@@ -88,6 +92,7 @@ export default function StoreCategories() {
             ))
           )}
         </div>
+      </div>
       </div>
     </div>
   );

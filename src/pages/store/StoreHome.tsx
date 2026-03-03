@@ -24,7 +24,7 @@ export default function StoreHome() {
   return (
     <div className="bg-muted min-h-full">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-8">
+      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-8 sticky top-0 z-20">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-lg font-bold tracking-tight">宿迁总店</h1>

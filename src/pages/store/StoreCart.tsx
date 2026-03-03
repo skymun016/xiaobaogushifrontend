@@ -32,16 +32,18 @@ export default function StoreCart() {
 
   return (
     <div className="pb-24 bg-muted min-h-full">
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
+      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-3 sticky top-0 z-20">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-bold text-foreground">购物车</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">{itemCount} 件商品</p>
+            <h1 className="text-lg font-bold">购物车</h1>
+            <p className="text-xs text-primary-foreground/60 mt-0.5">{itemCount} 件商品</p>
           </div>
-          <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={clearCart}>
+          <Button variant="ghost" size="sm" className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10" onClick={clearCart}>
             <Trash2 className="w-4 h-4 mr-1" /> 清空
           </Button>
         </div>
+      </div>
+      <div className="p-4">
 
         <div className="space-y-2.5">
           <AnimatePresence mode="popLayout">

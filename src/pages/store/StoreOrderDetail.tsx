@@ -23,7 +23,7 @@ export default function StoreOrderDetail() {
   return (
     <div className="pb-4">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground p-4">
+      <div className="bg-primary text-primary-foreground p-4 sticky top-0 z-20">
         <div className="flex items-center gap-3 mb-3">
           <Link to="/store/orders"><ArrowLeft className="w-5 h-5" /></Link>
           <h1 className="text-base font-bold">订单详情</h1>

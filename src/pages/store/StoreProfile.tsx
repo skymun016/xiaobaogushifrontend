@@ -16,7 +16,7 @@ export default function StoreProfile() {
   return (
     <div className="bg-muted min-h-full">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground px-5 pt-8 pb-10">
+      <div className="bg-primary text-primary-foreground px-5 pt-8 pb-10 sticky top-0 z-20">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-2xl bg-primary-foreground/15 flex items-center justify-center">
             <User className="w-8 h-8" />

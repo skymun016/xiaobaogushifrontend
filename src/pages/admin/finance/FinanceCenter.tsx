@@ -1,13 +1,18 @@
 import { useState, useMemo } from 'react';
+import { format } from 'date-fns';
 import { formatDateWithDay } from '@/lib/utils';
 import { mockPaymentRecords, mockRefunds, mockRevenueData, mockProfitByProduct, mockOrders } from '@/mock/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, TrendingUp, CreditCard, RotateCcw, ChevronDown, ChevronRight, Store } from 'lucide-react';
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { DollarSign, TrendingUp, CreditCard, RotateCcw, ChevronDown, ChevronRight, Store, CalendarIcon } from 'lucide-react';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { OrderStatus } from '@/types/enums';
+import { cn } from '@/lib/utils';
 
 const totalRevenue = mockPaymentRecords.filter(p => p.status === 'success').reduce((s, p) => s + p.amount, 0);
 const totalRefund = mockRefunds.reduce((s, r) => s + r.amount, 0);
@@ -33,22 +38,25 @@ interface StoreProfitGroup {
   }[];
 }
 
-function computeStoreProfits(): StoreProfitGroup[] {
-  const validOrders = mockOrders.filter(o => o.status !== OrderStatus.CANCELLED);
+function computeStoreProfits(dateFrom?: Date, dateTo?: Date): StoreProfitGroup[] {
+  let validOrders = mockOrders.filter(o => o.status !== OrderStatus.CANCELLED);
+
+  if (dateFrom) {
+    validOrders = validOrders.filter(o => new Date(o.createdAt) >= dateFrom);
+  }
+  if (dateTo) {
+    const end = new Date(dateTo);
+    end.setHours(23, 59, 59, 999);
+    validOrders = validOrders.filter(o => new Date(o.createdAt) <= end);
+  }
+
   const grouped: Record<string, StoreProfitGroup> = {};
 
   for (const order of validOrders) {
     if (!grouped[order.storeId]) {
       grouped[order.storeId] = {
-        storeName: order.storeName,
-        storeId: order.storeId,
-        orderCount: 0,
-        totalSale: 0,
-        totalCost: 0,
-        totalLogistics: 0,
-        profit: 0,
-        margin: 0,
-        orders: [],
+        storeName: order.storeName, storeId: order.storeId,
+        orderCount: 0, totalSale: 0, totalCost: 0, totalLogistics: 0, profit: 0, margin: 0, orders: [],
       };
     }
     const g = grouped[order.storeId];
@@ -59,21 +67,13 @@ function computeStoreProfits(): StoreProfitGroup[] {
     g.totalCost += order.totalCostPrice;
     g.totalLogistics += logistics;
     g.orders.push({
-      orderNo: order.orderNo,
-      status: order.status,
-      totalSale: order.totalSalePrice,
-      totalCost: order.totalCostPrice,
-      logistics,
-      profit,
-      createdAt: order.createdAt,
+      orderNo: order.orderNo, status: order.status,
+      totalSale: order.totalSalePrice, totalCost: order.totalCostPrice,
+      logistics, profit, createdAt: order.createdAt,
       items: order.items.map(item => ({
-        productName: item.productName,
-        quantity: item.quantity,
-        unit: item.unit,
-        salePrice: item.salePrice,
-        costPrice: item.costPrice,
-        saleTotal: item.salePrice * item.quantity,
-        costTotal: item.costPrice * item.quantity,
+        productName: item.productName, quantity: item.quantity, unit: item.unit,
+        salePrice: item.salePrice, costPrice: item.costPrice,
+        saleTotal: item.salePrice * item.quantity, costTotal: item.costPrice * item.quantity,
       })),
     });
   }
@@ -92,12 +92,31 @@ const statusLabel: Record<string, string> = {
   [OrderStatus.CANCELLED]: '已取消',
 };
 
+function DatePicker({ date, onChange, placeholder }: { date?: Date; onChange: (d?: Date) => void; placeholder: string }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" className={cn("w-[150px] justify-start text-left font-normal text-sm", !date && "text-muted-foreground")}>
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, 'yyyy-MM-dd') : placeholder}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar mode="single" selected={date} onSelect={onChange} initialFocus className={cn("p-3 pointer-events-auto")} />
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 export default function FinanceCenter() {
   const [tab, setTab] = useState('overview');
   const [expandedStores, setExpandedStores] = useState<Set<string>>(new Set());
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  const [dateFrom, setDateFrom] = useState<Date | undefined>();
+  const [dateTo, setDateTo] = useState<Date | undefined>();
 
-  const storeProfits = useMemo(computeStoreProfits, []);
+  const storeProfits = useMemo(() => computeStoreProfits(dateFrom, dateTo), [dateFrom, dateTo]);
+
   const grandTotal = useMemo(() => ({
     sale: storeProfits.reduce((s, g) => s + g.totalSale, 0),
     cost: storeProfits.reduce((s, g) => s + g.totalCost, 0),
@@ -106,21 +125,24 @@ export default function FinanceCenter() {
     orders: storeProfits.reduce((s, g) => s + g.orderCount, 0),
   }), [storeProfits]);
 
+  const chartData = useMemo(() =>
+    storeProfits.map(g => ({
+      name: g.storeName,
+      售价: g.totalSale,
+      成本: g.totalCost,
+      物流: g.totalLogistics,
+      利润: g.profit,
+    }))
+  , [storeProfits]);
+
   const toggleStore = (id: string) => {
-    setExpandedStores(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+    setExpandedStores(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  };
+  const toggleOrder = (no: string) => {
+    setExpandedOrders(prev => { const n = new Set(prev); n.has(no) ? n.delete(no) : n.add(no); return n; });
   };
 
-  const toggleOrder = (orderNo: string) => {
-    setExpandedOrders(prev => {
-      const next = new Set(prev);
-      next.has(orderNo) ? next.delete(orderNo) : next.add(orderNo);
-      return next;
-    });
-  };
+  const clearDates = () => { setDateFrom(undefined); setDateTo(undefined); };
 
   return (
     <div className="space-y-6">
@@ -291,8 +313,27 @@ export default function FinanceCenter() {
           </Card>
         </TabsContent>
 
-        {/* Profit by store - dynamically computed */}
+        {/* Profit by store */}
         <TabsContent value="profit-store" className="mt-4 space-y-4">
+          {/* Date filter */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm font-medium">时间筛选</span>
+                <DatePicker date={dateFrom} onChange={setDateFrom} placeholder="开始日期" />
+                <span className="text-muted-foreground">至</span>
+                <DatePicker date={dateTo} onChange={setDateTo} placeholder="结束日期" />
+                {(dateFrom || dateTo) && (
+                  <Button variant="ghost" size="sm" onClick={clearDates}>清除</Button>
+                )}
+                <span className="text-xs text-muted-foreground ml-auto">
+                  {dateFrom || dateTo ? '已筛选' : '显示全部订单'}
+                  {storeProfits.length > 0 && ` · ${grandTotal.orders} 笔订单`}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Summary cards */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
             <Card><CardContent className="p-3 text-center"><p className="text-xs text-muted-foreground">订单总数</p><p className="text-xl font-bold">{grandTotal.orders}</p></CardContent></Card>
@@ -302,11 +343,40 @@ export default function FinanceCenter() {
             <Card><CardContent className="p-3 text-center"><p className="text-xs text-muted-foreground">总利润</p><p className="text-xl font-bold text-status-success">¥{grandTotal.profit.toLocaleString()}</p></CardContent></Card>
           </div>
 
+          {/* Profit comparison chart */}
+          {chartData.length > 0 && (
+            <Card>
+              <CardHeader><CardTitle className="text-base">门店利润对比</CardTitle></CardHeader>
+              <CardContent>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="name" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip formatter={(value: number) => `¥${value.toLocaleString()}`} />
+                      <Legend />
+                      <Bar dataKey="售价" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="成本" fill="hsl(var(--chart-4))" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="物流" fill="hsl(var(--chart-3))" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="利润" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <p className="text-xs text-muted-foreground">毛利 = 售价合计 − 成本合计 − 物流成本（已排除已取消订单）</p>
 
           {/* Store groups */}
           <div className="space-y-3">
-            {storeProfits.map(group => {
+            {storeProfits.length === 0 ? (
+              <Card><CardContent className="p-8 text-center text-muted-foreground">
+                <Store className="w-10 h-10 mx-auto mb-2 opacity-30" />
+                <p>该时间范围内无订单数据</p>
+              </CardContent></Card>
+            ) : storeProfits.map(group => {
               const isOpen = expandedStores.has(group.storeId);
               return (
                 <Card key={group.storeId}>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/lib/store';
@@ -24,10 +24,21 @@ const navItems = [
 ];
 
 export default function AdminLayout() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { userName, logout } = useAuthStore();
+  const hoverTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  const handleMouseEnter = useCallback(() => {
+    clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => setCollapsed(false), 150);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    clearTimeout(hoverTimer.current);
+    hoverTimer.current = setTimeout(() => setCollapsed(true), 300);
+  }, []);
 
   const isActive = (path: string) => {
     if (path === '/admin') return location.pathname === '/admin';
@@ -42,7 +53,7 @@ export default function AdminLayout() {
       {/* Logo */}
       <div className="flex items-center h-14 px-4">
         {!collapsed && (
-          <h1 className="text-lg font-bold text-sidebar-foreground tracking-tight">
+          <h1 className="text-lg font-bold text-sidebar-foreground tracking-tight whitespace-nowrap">
             小堡故事订货管理系统
           </h1>
         )}
@@ -57,7 +68,7 @@ export default function AdminLayout() {
             to={item.path}
             onClick={() => setMobileOpen(false)}
             className={cn(
-              'flex items-center gap-3 px-4 py-2.5 mx-2 rounded-md text-sm transition-colors',
+              'flex items-center gap-3 px-4 py-2.5 mx-2 rounded-md text-sm transition-colors whitespace-nowrap',
               isActive(item.path)
                 ? 'bg-sidebar-accent text-sidebar-primary font-medium'
                 : 'text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground'
@@ -88,14 +99,6 @@ export default function AdminLayout() {
           )}
         </div>
       </div>
-
-      {/* Collapse toggle */}
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="hidden lg:flex items-center justify-center h-10 text-sidebar-foreground/60 hover:text-sidebar-foreground"
-      >
-        {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-      </button>
     </div>
   );
 
@@ -107,7 +110,11 @@ export default function AdminLayout() {
       )}
 
       {/* Sidebar - Desktop */}
-      <aside className="hidden lg:flex h-full shrink-0">
+      <aside
+        className="hidden lg:flex h-full shrink-0"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         {sidebar}
       </aside>
 
@@ -134,7 +141,7 @@ export default function AdminLayout() {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6" onClick={() => { if (!collapsed) setCollapsed(true); }}>
+        <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
       </div>

@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { DollarSign, TrendingUp, CreditCard, RotateCcw, ChevronDown, ChevronRight, Store, CalendarIcon } from 'lucide-react';
+import { DollarSign, TrendingUp, CreditCard, RotateCcw, ChevronDown, ChevronRight, Store, CalendarIcon, Download, FileSpreadsheet } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { OrderStatus } from '@/types/enums';
 import { cn } from '@/lib/utils';
@@ -143,6 +143,136 @@ export default function FinanceCenter() {
   };
 
   const clearDates = () => { setDateFrom(undefined); setDateTo(undefined); };
+
+  const getDateRangeLabel = () => {
+    if (dateFrom && dateTo) return `${format(dateFrom, 'yyyy-MM-dd')} 至 ${format(dateTo, 'yyyy-MM-dd')}`;
+    if (dateFrom) return `${format(dateFrom, 'yyyy-MM-dd')} 起`;
+    if (dateTo) return `至 ${format(dateTo, 'yyyy-MM-dd')}`;
+    return '全部时间';
+  };
+
+  const exportExcel = async () => {
+    const XLSX = await import('xlsx');
+    const wb = XLSX.utils.book_new();
+
+    // Summary sheet
+    const summaryData = storeProfits.map(g => ({
+      '门店': g.storeName,
+      '订单数': g.orderCount,
+      '售价合计': g.totalSale,
+      '成本合计': g.totalCost,
+      '物流成本': g.totalLogistics,
+      '利润': g.profit,
+      '毛利率(%)': Number(g.margin.toFixed(1)),
+    }));
+    summaryData.push({
+      '门店': '合计',
+      '订单数': grandTotal.orders,
+      '售价合计': grandTotal.sale,
+      '成本合计': grandTotal.cost,
+      '物流成本': grandTotal.logistics,
+      '利润': grandTotal.profit,
+      '毛利率(%)': grandTotal.sale > 0 ? Number(((grandTotal.profit / grandTotal.sale) * 100).toFixed(1)) : 0,
+    });
+    const ws1 = XLSX.utils.json_to_sheet(summaryData);
+    ws1['!cols'] = [{ wch: 14 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws1, '门店利润汇总');
+
+    // Detail sheet
+    const detailData: Record<string, unknown>[] = [];
+    for (const g of storeProfits) {
+      for (const order of g.orders) {
+        for (const item of order.items) {
+          detailData.push({
+            '门店': g.storeName,
+            '订单号': order.orderNo,
+            '状态': statusLabel[order.status] || order.status,
+            '下单时间': order.createdAt,
+            '商品': item.productName,
+            '数量': item.quantity,
+            '单位': item.unit,
+            '售价': item.salePrice,
+            '成本': item.costPrice,
+            '售价小计': item.saleTotal,
+            '成本小计': item.costTotal,
+            '商品毛利': item.saleTotal - item.costTotal,
+          });
+        }
+      }
+    }
+    const ws2 = XLSX.utils.json_to_sheet(detailData);
+    ws2['!cols'] = [{ wch: 14 }, { wch: 18 }, { wch: 8 }, { wch: 20 }, { wch: 12 }, { wch: 6 }, { wch: 6 }, { wch: 8 }, { wch: 8 }, { wch: 10 }, { wch: 10 }, { wch: 10 }];
+    XLSX.utils.book_append_sheet(wb, ws2, '订单明细');
+
+    XLSX.writeFile(wb, `门店利润报表_${getDateRangeLabel()}.xlsx`);
+  };
+
+  const exportPDF = async () => {
+    const { default: jsPDF } = await import('jspdf');
+    const autoTable = (await import('jspdf-autotable')).default;
+
+    const doc = new jsPDF({ orientation: 'landscape' });
+
+    // Title
+    doc.setFontSize(16);
+    doc.text('Store Profit Report', 14, 20);
+    doc.setFontSize(10);
+    doc.text(`Date Range: ${getDateRangeLabel()}`, 14, 28);
+
+    // Summary table
+    const summaryHead = [['Store', 'Orders', 'Revenue', 'Cost', 'Logistics', 'Profit', 'Margin']];
+    const summaryBody = storeProfits.map(g => [
+      g.storeName, g.orderCount.toString(),
+      `¥${g.totalSale.toLocaleString()}`, `¥${g.totalCost.toLocaleString()}`,
+      `¥${g.totalLogistics}`, `¥${g.profit.toLocaleString()}`, `${g.margin.toFixed(1)}%`,
+    ]);
+    summaryBody.push([
+      'Total', grandTotal.orders.toString(),
+      `¥${grandTotal.sale.toLocaleString()}`, `¥${grandTotal.cost.toLocaleString()}`,
+      `¥${grandTotal.logistics.toLocaleString()}`, `¥${grandTotal.profit.toLocaleString()}`,
+      grandTotal.sale > 0 ? `${((grandTotal.profit / grandTotal.sale) * 100).toFixed(1)}%` : '0%',
+    ]);
+
+    autoTable(doc, {
+      head: summaryHead,
+      body: summaryBody,
+      startY: 34,
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [66, 133, 244] },
+      foot: [],
+    });
+
+    // Detail table on new page
+    doc.addPage();
+    doc.setFontSize(14);
+    doc.text('Order Details', 14, 20);
+
+    const detailHead = [['Store', 'Order No', 'Status', 'Product', 'Qty', 'Price', 'Cost', 'Subtotal', 'Cost Sub', 'Margin']];
+    const detailBody: string[][] = [];
+    for (const g of storeProfits) {
+      for (const order of g.orders) {
+        for (const item of order.items) {
+          detailBody.push([
+            g.storeName, order.orderNo, statusLabel[order.status] || order.status,
+            item.productName, `${item.quantity}${item.unit}`,
+            `¥${item.salePrice}`, `¥${item.costPrice}`,
+            `¥${item.saleTotal}`, `¥${item.costTotal}`,
+            `¥${item.saleTotal - item.costTotal}`,
+          ]);
+        }
+      }
+    }
+
+    autoTable(doc, {
+      head: detailHead,
+      body: detailBody,
+      startY: 26,
+      styles: { fontSize: 7 },
+      headStyles: { fillColor: [66, 133, 244] },
+    });
+
+    doc.save(`Store_Profit_Report_${getDateRangeLabel()}.pdf`);
+  };
 
   return (
     <div className="space-y-6">
@@ -326,10 +456,18 @@ export default function FinanceCenter() {
                 {(dateFrom || dateTo) && (
                   <Button variant="ghost" size="sm" onClick={clearDates}>清除</Button>
                 )}
-                <span className="text-xs text-muted-foreground ml-auto">
+                <span className="text-xs text-muted-foreground">
                   {dateFrom || dateTo ? '已筛选' : '显示全部订单'}
                   {storeProfits.length > 0 && ` · ${grandTotal.orders} 笔订单`}
                 </span>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" onClick={exportExcel} disabled={storeProfits.length === 0}>
+                    <FileSpreadsheet className="w-4 h-4 mr-1" />Excel
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={exportPDF} disabled={storeProfits.length === 0}>
+                    <Download className="w-4 h-4 mr-1" />PDF
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

@@ -64,6 +64,8 @@ export default function MiniProgramCenter() {
   const [showMchKey, setShowMchKey] = useState(false);
   const [editPage, setEditPage] = useState<string | null>(null);
   const [templates, setTemplates] = useState(mockTemplates);
+  const [editTemplateId, setEditTemplateId] = useState<string | null>(null);
+  const [editTemplateValue, setEditTemplateValue] = useState('');
 
   const handleCopy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -78,6 +80,23 @@ export default function MiniProgramCenter() {
     if (tpl) {
       toast.success(tpl.enabled ? `已关闭「${tpl.name}」` : `已启用「${tpl.name}」`);
     }
+  };
+
+  const openEditTemplate = (id: string) => {
+    const tpl = templates.find(t => t.id === id);
+    if (tpl) {
+      setEditTemplateId(id);
+      setEditTemplateValue(tpl.templateId);
+    }
+  };
+
+  const saveTemplateId = () => {
+    if (!editTemplateId) return;
+    setTemplates(prev =>
+      prev.map(t => t.id === editTemplateId ? { ...t, templateId: editTemplateValue } : t)
+    );
+    toast.success('模板ID已更新');
+    setEditTemplateId(null);
   };
 
   return (
@@ -350,7 +369,14 @@ export default function MiniProgramCenter() {
                   {templates.map(tpl => (
                     <TableRow key={tpl.id}>
                       <TableCell className="font-medium">{tpl.name}</TableCell>
-                      <TableCell className="font-mono text-xs text-muted-foreground">{tpl.templateId}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <span className="font-mono text-xs text-muted-foreground">{tpl.templateId}</span>
+                          <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => openEditTemplate(tpl.id)}>
+                            <Edit className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
                           {tpl.keywords.map(kw => (
@@ -421,6 +447,31 @@ export default function MiniProgramCenter() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setEditPage(null)}>取消</Button>
             <Button onClick={() => { toast.success('页面配置已保存'); setEditPage(null); }}>保存</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit template ID dialog */}
+      <Dialog open={!!editTemplateId} onOpenChange={() => setEditTemplateId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>修改模板ID</DialogTitle>
+            <DialogDescription>
+              {editTemplateId && templates.find(t => t.id === editTemplateId)?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Label>模板ID</Label>
+            <Input
+              value={editTemplateValue}
+              onChange={e => setEditTemplateValue(e.target.value)}
+              placeholder="请输入微信模板ID"
+              className="font-mono text-sm"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditTemplateId(null)}>取消</Button>
+            <Button onClick={saveTemplateId}>保存</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

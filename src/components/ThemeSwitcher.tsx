@@ -135,7 +135,7 @@ function applyTheme(colors: ThemePreset['colors'], isDark: boolean) {
 }
 
 export default function ThemeSwitcher() {
-  const [activeId, setActiveId] = useState(() => localStorage.getItem('theme-preset') || 'default-blue');
+  const [activeId, setActiveId] = useState(() => localStorage.getItem('theme-preset') || 'teal');
   const [isDark, setIsDark] = useState(() => localStorage.getItem('theme-dark') === 'true');
 
   useEffect(() => {

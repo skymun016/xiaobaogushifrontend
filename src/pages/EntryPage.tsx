@@ -13,7 +13,7 @@ export default function EntryPage() {
           <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Package className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold">门店订货系统</h1>
+          <h1 className="text-2xl font-bold">小堡故事订货管理系统</h1>
           <p className="text-muted-foreground mt-1">请选择要进入的端口</p>
         </div>
 

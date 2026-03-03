@@ -18,7 +18,7 @@ export default function StoreHome() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <h1 className="text-lg font-bold">宿迁总店</h1>
-            <p className="text-primary-foreground/70 text-xs">欢迎使用门店订货系统</p>
+            <p className="text-primary-foreground/70 text-xs">欢迎使用小堡故事订货管理系统</p>
           </div>
           <Link to="/store/cart" className="relative">
             <ShoppingCart className="w-6 h-6" />

@@ -42,7 +42,7 @@ export default function AdminLayout() {
       <div className="flex items-center h-16 px-4 border-b border-sidebar-border">
         {!collapsed && (
           <h1 className="text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-            门店订货系统
+            小堡故事订货管理系统
           </h1>
         )}
         {collapsed && <Package className="w-6 h-6 text-sidebar-primary mx-auto" />}

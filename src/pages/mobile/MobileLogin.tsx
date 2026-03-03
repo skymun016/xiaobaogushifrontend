@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/lib/store';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,20 +13,16 @@ type RoleTab = 'store' | 'manager';
 
 export default function MobileLogin() {
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { signIn } = useAuth();
   const [role, setRole] = useState<RoleTab>('store');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    if (!phone.trim()) {
-      toast.error('请输入手机号');
-      return;
-    }
-    if (!/^1\d{10}$/.test(phone.trim())) {
-      toast.error('请输入正确的手机号');
+  const handleLogin = async () => {
+    if (!email.trim()) {
+      toast.error('请输入邮箱/账号');
       return;
     }
     if (!password) {
@@ -35,13 +31,15 @@ export default function MobileLogin() {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      const userName = role === 'store' ? '张三' : '管理员';
-      login(role, userName);
-      toast.success('登录成功');
-      navigate(role === 'store' ? '/store' : '/manager');
-    }, 600);
+    const { error } = await signIn(email.trim(), password);
+    setLoading(false);
+
+    if (error) {
+      toast.error('登录失败：' + error.message);
+      return;
+    }
+    toast.success('登录成功');
+    navigate(role === 'store' ? '/store' : '/manager');
   };
 
   return (
@@ -93,16 +91,15 @@ export default function MobileLogin() {
         className="flex-1 px-6 pt-8 space-y-5"
       >
         <div className="space-y-2">
-          <Label className="text-sm font-medium">手机号</Label>
+          <Label className="text-sm font-medium">邮箱 / 账号</Label>
           <div className="relative">
             <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              type="tel"
-              placeholder="请输入手机号"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
+              type="email"
+              placeholder="请输入邮箱"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="pl-10 h-11 rounded-xl border-border/50 bg-card"
-              maxLength={11}
             />
           </div>
         </div>

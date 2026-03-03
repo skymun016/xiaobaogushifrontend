@@ -1,0 +1,204 @@
+import { useState, useEffect } from 'react';
+import { Palette, Check, Sun, Moon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+
+interface ThemePreset {
+  id: string;
+  name: string;
+  colors: {
+    primary: string;
+    accent: string;
+    sidebarBg: string;
+    sidebarFg: string;
+    background: string;
+  };
+  preview: { bg: string; sidebar: string; accent: string };
+}
+
+const presets: ThemePreset[] = [
+  {
+    id: 'default-blue',
+    name: '经典蓝',
+    colors: {
+      primary: '220 70% 45%',
+      accent: '35 95% 55%',
+      sidebarBg: '220 30% 12%',
+      sidebarFg: '220 10% 85%',
+      background: '220 20% 97%',
+    },
+    preview: { bg: '#f0f2f5', sidebar: '#171d2e', accent: '#e8a317' },
+  },
+  {
+    id: 'teal',
+    name: '青翠绿',
+    colors: {
+      primary: '172 66% 38%',
+      accent: '24 95% 58%',
+      sidebarBg: '172 35% 10%',
+      sidebarFg: '172 10% 85%',
+      background: '170 20% 97%',
+    },
+    preview: { bg: '#f0f5f4', sidebar: '#111d1b', accent: '#f09836' },
+  },
+  {
+    id: 'indigo',
+    name: '靛蓝紫',
+    colors: {
+      primary: '245 58% 51%',
+      accent: '340 75% 55%',
+      sidebarBg: '245 30% 13%',
+      sidebarFg: '245 10% 85%',
+      background: '245 20% 97%',
+    },
+    preview: { bg: '#f1f0f6', sidebar: '#19172d', accent: '#d63b6e' },
+  },
+  {
+    id: 'warm',
+    name: '暖橙棕',
+    colors: {
+      primary: '20 80% 48%',
+      accent: '45 90% 50%',
+      sidebarBg: '20 30% 12%',
+      sidebarFg: '20 10% 85%',
+      background: '30 25% 97%',
+    },
+    preview: { bg: '#f6f3f0', sidebar: '#271c15', accent: '#d4a616' },
+  },
+  {
+    id: 'slate',
+    name: '石墨灰',
+    colors: {
+      primary: '210 15% 40%',
+      accent: '200 70% 50%',
+      sidebarBg: '210 15% 10%',
+      sidebarFg: '210 10% 80%',
+      background: '210 10% 96%',
+    },
+    preview: { bg: '#f1f2f3', sidebar: '#16191c', accent: '#2692d4' },
+  },
+  {
+    id: 'rose',
+    name: '玫瑰红',
+    colors: {
+      primary: '350 65% 48%',
+      accent: '190 70% 45%',
+      sidebarBg: '350 25% 12%',
+      sidebarFg: '350 10% 85%',
+      background: '350 15% 97%',
+    },
+    preview: { bg: '#f6f0f2', sidebar: '#261519', accent: '#1fa8b8' },
+  },
+];
+
+function applyTheme(colors: ThemePreset['colors'], isDark: boolean) {
+  const root = document.documentElement;
+  root.style.setProperty('--primary', colors.primary);
+  root.style.setProperty('--ring', colors.primary);
+  root.style.setProperty('--accent', colors.accent);
+  root.style.setProperty('--sidebar-background', colors.sidebarBg);
+  root.style.setProperty('--sidebar-foreground', colors.sidebarFg);
+  root.style.setProperty('--sidebar-primary', colors.primary);
+
+  // Derive sidebar accent from sidebar bg (slightly lighter)
+  const parts = colors.sidebarBg.split(' ');
+  const hue = parts[0];
+  const sat = parseInt(parts[1]);
+  const light = parseInt(parts[2]);
+  root.style.setProperty('--sidebar-accent', `${hue} ${sat + 5}% ${light + 6}%`);
+  root.style.setProperty('--sidebar-border', `${hue} ${sat + 5}% ${light + 8}%`);
+  root.style.setProperty('--sidebar-ring', colors.primary);
+
+  if (!isDark) {
+    root.style.setProperty('--background', colors.background);
+    // Derive chart-1 from primary
+    root.style.setProperty('--chart-1', colors.primary.replace(/\d+%$/, (m) => `${parseInt(m) + 5}%`));
+  }
+}
+
+export default function ThemeSwitcher() {
+  const [activeId, setActiveId] = useState(() => localStorage.getItem('theme-preset') || 'default-blue');
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('theme-dark') === 'true');
+
+  useEffect(() => {
+    const preset = presets.find(p => p.id === activeId) || presets[0];
+    applyTheme(preset.colors, isDark);
+    document.documentElement.classList.toggle('dark', isDark);
+    localStorage.setItem('theme-preset', activeId);
+    localStorage.setItem('theme-dark', String(isDark));
+  }, [activeId, isDark]);
+
+  const selectPreset = (id: string) => {
+    setActiveId(id);
+  };
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+          <Palette className="w-5 h-5" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-72" align="end">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">主题配色</p>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setIsDark(!isDark)}
+              title={isDark ? '切换亮色' : '切换暗色'}
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            {presets.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => selectPreset(preset.id)}
+                className={cn(
+                  'relative flex flex-col items-center gap-1.5 p-2 rounded-lg border-2 transition-all hover:scale-105',
+                  activeId === preset.id
+                    ? 'border-primary shadow-sm'
+                    : 'border-transparent hover:border-border'
+                )}
+              >
+                {/* Mini preview */}
+                <div
+                  className="w-full h-10 rounded-md flex overflow-hidden"
+                  style={{ background: preset.preview.bg }}
+                >
+                  <div
+                    className="w-3 h-full"
+                    style={{ background: preset.preview.sidebar }}
+                  />
+                  <div className="flex-1 flex items-center justify-center gap-0.5 px-1">
+                    <div
+                      className="w-4 h-2 rounded-sm"
+                      style={{ background: preset.preview.accent }}
+                    />
+                    <div className="w-6 h-2 rounded-sm bg-gray-300" />
+                  </div>
+                </div>
+                <span className="text-[10px] text-muted-foreground leading-none">{preset.name}</span>
+                {activeId === preset.id && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 text-primary-foreground" />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}

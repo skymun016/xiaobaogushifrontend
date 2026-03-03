@@ -3,7 +3,7 @@ import { formatDateWithDay } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { mockOrders } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -85,7 +85,7 @@ export default function OrderList() {
                       <TableHead>金额</TableHead>
                       <TableHead>订单状态</TableHead>
                       <TableHead>支付状态</TableHead>
-                      <TableHead>履约状态</TableHead>
+                      <TableHead>发货状态</TableHead>
                       {tab === 'applications' && <TableHead>审核状态</TableHead>}
                       <TableHead>下单时间</TableHead>
                       <TableHead>操作</TableHead>
@@ -106,7 +106,7 @@ export default function OrderList() {
                         <TableCell>¥{order.totalSalePrice.toFixed(2)}</TableCell>
                         <TableCell><StatusBadge status={order.status} /></TableCell>
                         <TableCell><StatusBadge status={order.paymentStatus} /></TableCell>
-                        <TableCell><StatusBadge status={order.fulfillmentStatus} /></TableCell>
+                        <TableCell><StatusBadge status={order.shippingStatus} /></TableCell>
                         {tab === 'applications' && (
                           <TableCell>
                             {order.auditStatus && <StatusBadge status={order.auditStatus} />}
@@ -131,7 +131,6 @@ export default function OrderList() {
             </CardContent>
           </Card>
 
-          {/* Pagination */}
           {filtered.length > 0 && (
             <div className="flex items-center justify-between mt-4">
               <p className="text-sm text-muted-foreground">共 {filtered.length} 条记录</p>

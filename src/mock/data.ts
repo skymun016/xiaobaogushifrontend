@@ -1,6 +1,6 @@
 import { Order, Product, Store, DashboardStats, OrderTimeline } from '@/types/models';
 import {
-  OrderStatus, PaymentStatus, AuditStatus, FulfillmentStatus,
+  OrderStatus, PaymentStatus, AuditStatus, ShippingStatus,
   ProcurementAggStatus, PurchaseOrderStatus
 } from '@/types/enums';
 
@@ -78,9 +78,8 @@ const createTimeline = (status: OrderStatus, isApp: boolean): OrderTimeline[] =>
     base.push({ time: '2026-02-25 11:00:00', title: '录入物流成本', description: '预估物流成本 ¥50.00', operator: '管理员' });
   }
   if (status === OrderStatus.COMPLETED) {
-    base.push({ time: '2026-02-28 14:00:00', title: '拣货完成', operator: '仓库李' });
-    base.push({ time: '2026-02-28 16:00:00', title: '已发货', description: '配送员已取货' });
-    base.push({ time: '2026-03-01 10:00:00', title: '已签收', description: '门店已确认签收', operator: '张三' });
+    base.push({ time: '2026-02-28 14:00:00', title: '供应商发货', description: '司机张师傅 13800001111', operator: '管理员' });
+    base.push({ time: '2026-03-01 10:00:00', title: '已收货', description: '门店已确认收货并上传照片', operator: '张三' });
   }
   return base;
 };
@@ -89,7 +88,7 @@ export const mockOrders: Order[] = [
   {
     id: 'o1', orderNo: 'ORD20260225001', storeId: 's1', storeName: '宿迁总店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
-    fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
+    shippingStatus: ShippingStatus.NOT_SHIPPED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
       { id: 'oi1', productId: 'p1', productName: '封口机', skuCode: 'MC-001', spec: '台式/台', unit: '台', quantity: 2, costPrice: 680, salePrice: 1280 },
       { id: 'oi2', productId: 'p4', productName: '红茶茶叶', skuCode: 'FM-001', spec: '500g/袋', unit: '袋', quantity: 5, costPrice: 35, salePrice: 68 },
@@ -101,7 +100,7 @@ export const mockOrders: Order[] = [
   {
     id: 'o2', orderNo: 'ORD20260225002', storeId: 's2', storeName: '宿迁1号店',
     status: OrderStatus.PROCESSING, paymentStatus: PaymentStatus.PAID,
-    fulfillmentStatus: FulfillmentStatus.PICKING, procurementStatus: ProcurementAggStatus.READY,
+    shippingStatus: ShippingStatus.SHIPPED, procurementStatus: ProcurementAggStatus.READY,
     items: [
       { id: 'oi3', productId: 'p5', productName: '白砂糖', skuCode: 'FM-002', spec: '25kg/袋', unit: '袋', quantity: 3, costPrice: 85, salePrice: 128 },
       { id: 'oi4', productId: 'p7', productName: '一次性杯子', skuCode: 'PM-001', spec: '500ml*1000个/箱', unit: '箱', quantity: 2, costPrice: 120, salePrice: 198 },
@@ -111,11 +110,21 @@ export const mockOrders: Order[] = [
     estimatedProfit: 317, isApplication: false,
     createdAt: '2026-02-25 10:15:00', paidAt: '2026-02-25 10:30:00',
     timeline: createTimeline(OrderStatus.PROCESSING, false),
+    shippingInfo: {
+      driverName: '张师傅',
+      driverPhone: '13800001111',
+      shippingPhotos: ['https://placehold.co/400x300/e2e8f0/64748b?text=发货照片1'],
+      itemTrackings: [
+        { itemId: 'oi3', trackingNo: 'SF1234567890' },
+        { itemId: 'oi4', trackingNo: 'SF1234567891' },
+      ],
+      shippedAt: '2026-02-27 08:00:00',
+    },
   },
   {
     id: 'o3', orderNo: 'ORD20260224001', storeId: 's1', storeName: '宿迁总店',
     status: OrderStatus.COMPLETED, paymentStatus: PaymentStatus.PAID,
-    fulfillmentStatus: FulfillmentStatus.RECEIVED, procurementStatus: ProcurementAggStatus.CLOSED,
+    shippingStatus: ShippingStatus.RECEIVED, procurementStatus: ProcurementAggStatus.CLOSED,
     items: [
       { id: 'oi6', productId: 'p6', productName: '椰浆', skuCode: 'FM-003', spec: '1L/盒', unit: '盒', quantity: 10, costPrice: 12, salePrice: 22 },
       { id: 'oi7', productId: 'p9', productName: '围裙', skuCode: 'ZB-001', spec: '均码/件', unit: '件', quantity: 5, costPrice: 15, salePrice: 35 },
@@ -124,12 +133,20 @@ export const mockOrders: Order[] = [
     actualLogisticsCost: 18, estimatedProfit: 180, settlementProfit: 182,
     isApplication: false, createdAt: '2026-02-24 08:00:00', paidAt: '2026-02-24 08:15:00',
     timeline: createTimeline(OrderStatus.COMPLETED, false),
+    shippingInfo: {
+      driverName: '李师傅',
+      driverPhone: '13800002222',
+      shippingPhotos: ['https://placehold.co/400x300/e2e8f0/64748b?text=发货照片'],
+      receivePhotos: ['https://placehold.co/400x300/dcfce7/166534?text=收货照片'],
+      shippedAt: '2026-02-28 14:00:00',
+      receivedAt: '2026-03-01 10:00:00',
+    },
   },
   {
     id: 'o4', orderNo: 'APP20260226001', storeId: 's3', storeName: '宿迁2号店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
     auditStatus: AuditStatus.PENDING,
-    fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
+    shippingStatus: ShippingStatus.NOT_SHIPPED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
       { id: 'oi8', productId: 'p2', productName: '制冰机', skuCode: 'MC-002', spec: '商用/台', unit: '台', quantity: 1, costPrice: 1500, salePrice: 2980 },
     ],
@@ -142,7 +159,7 @@ export const mockOrders: Order[] = [
     id: 'o5', orderNo: 'APP20260226002', storeId: 's2', storeName: '宿迁1号店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
     auditStatus: AuditStatus.APPROVED,
-    fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
+    shippingStatus: ShippingStatus.NOT_SHIPPED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
       { id: 'oi9', productId: 'p3', productName: '果糖机', skuCode: 'MC-003', spec: '16格/台', unit: '台', quantity: 1, costPrice: 850, salePrice: 1680 },
       { id: 'oi10', productId: 'p6', productName: '椰浆', skuCode: 'FM-003', spec: '1L/盒', unit: '盒', quantity: 20, costPrice: 12, salePrice: 22 },
@@ -158,7 +175,7 @@ export const mockOrders: Order[] = [
   {
     id: 'o7', orderNo: 'ORD20260227001', storeId: 's4', storeName: '徐州1号店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
-    fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
+    shippingStatus: ShippingStatus.NOT_SHIPPED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
       { id: 'oi12', productId: 'p1', productName: '封口机', skuCode: 'MC-001', spec: '台式/台', unit: '台', quantity: 3, costPrice: 680, salePrice: 1280 },
       { id: 'oi13', productId: 'p2', productName: '制冰机', skuCode: 'MC-002', spec: '商用/台', unit: '台', quantity: 1, costPrice: 1500, salePrice: 2980 },
@@ -175,7 +192,7 @@ export const mockOrders: Order[] = [
   {
     id: 'o8', orderNo: 'ORD20260227002', storeId: 's5', storeName: '徐州2号店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
-    fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
+    shippingStatus: ShippingStatus.NOT_SHIPPED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
       { id: 'oi19', productId: 'p3', productName: '果糖机', skuCode: 'MC-003', spec: '16格/台', unit: '台', quantity: 2, costPrice: 850, salePrice: 1680 },
       { id: 'oi20', productId: 'p6', productName: '椰浆', skuCode: 'FM-003', spec: '1L/盒', unit: '盒', quantity: 30, costPrice: 12, salePrice: 22 },
@@ -189,7 +206,7 @@ export const mockOrders: Order[] = [
   {
     id: 'o6', orderNo: 'ORD20260225003', storeId: 's4', storeName: '徐州1号店',
     status: OrderStatus.CANCELLED, paymentStatus: PaymentStatus.REFUNDED,
-    fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.CLOSED,
+    shippingStatus: ShippingStatus.NOT_SHIPPED, procurementStatus: ProcurementAggStatus.CLOSED,
     items: [
       { id: 'oi11', productId: 'p10', productName: '品牌贴纸', skuCode: 'ZB-002', spec: '100张/卷', unit: '卷', quantity: 10, costPrice: 8, salePrice: 18 },
     ],
@@ -227,9 +244,7 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     id: 'po1', poNo: 'PO20260225001', supplierId: 'sup5', supplierName: '蒙源乳业',
     status: PurchaseOrderStatus.RECEIPTED,
     sourceOrderNos: ['ORD20260224001'],
-    items: [
-      { productName: '椰浆', skuCode: 'FM-003', quantity: 10, unit: '盒', costPrice: 12 },
-    ],
+    items: [{ productName: '椰浆', skuCode: 'FM-003', quantity: 10, unit: '盒', costPrice: 12 }],
     totalAmount: 120, eta: '2026-02-27', receiptNo: 'REC-001',
     createdAt: '2026-02-24 12:00:00',
     timeline: [
@@ -259,9 +274,7 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     id: 'po3', poNo: 'PO20260225003', supplierId: 'sup1', supplierName: '绿源农业',
     status: PurchaseOrderStatus.ABNORMAL,
     sourceOrderNos: ['ORD20260225001'],
-    items: [
-      { productName: '封口机', skuCode: 'MC-001', quantity: 2, unit: '台', costPrice: 680 },
-    ],
+    items: [{ productName: '封口机', skuCode: 'MC-001', quantity: 2, unit: '台', costPrice: 680 }],
     totalAmount: 1360, eta: '2026-02-28',
     abnormalReason: '供应商库存不足，仅能供应1台',
     createdAt: '2026-02-25 14:30:00',
@@ -275,9 +288,7 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
     id: 'po4', poNo: 'PO20260225004', supplierId: 'sup4', supplierName: '北方粮仓',
     status: PurchaseOrderStatus.RECEIPTED,
     sourceOrderNos: ['ORD20260224001'],
-    items: [
-      { productName: '围裙', skuCode: 'ZB-001', quantity: 5, unit: '件', costPrice: 15 },
-    ],
+    items: [{ productName: '围裙', skuCode: 'ZB-001', quantity: 5, unit: '件', costPrice: 15 }],
     totalAmount: 75, eta: '2026-02-27', receiptNo: 'REC-002',
     createdAt: '2026-02-24 12:30:00',
     timeline: [
@@ -310,55 +321,6 @@ export const mockInventoryRecords: InventoryRecord[] = [
   { id: 'inv4', type: 'out', docNo: 'OUT20260228002', productName: '围裙', skuCode: 'ZB-001', quantity: 5, unit: '件', operator: '仓库李', relatedOrderNo: 'ORD20260224001', createdAt: '2026-02-28 14:30:00', remark: '订单出库' },
   { id: 'inv5', type: 'in', docNo: 'IN20260227001', productName: '封口机', skuCode: 'MC-001', quantity: 5, unit: '台', operator: '仓库李', createdAt: '2026-02-27 09:00:00', remark: '采购入库' },
   { id: 'inv6', type: 'in', docNo: 'IN20260227002', productName: '白砂糖', skuCode: 'FM-002', quantity: 50, unit: '袋', operator: '仓库张', createdAt: '2026-02-27 10:00:00', remark: '采购入库' },
-];
-
-// ============ Fulfillment Tasks ============
-export interface FulfillmentTask {
-  id: string;
-  taskNo: string;
-  orderNo: string;
-  storeName: string;
-  status: FulfillmentStatus;
-  items: { productName: string; quantity: number; unit: string; picked?: boolean }[];
-  operator?: string;
-  createdAt: string;
-  pickedAt?: string;
-  shippedAt?: string;
-  receivedAt?: string;
-  abnormalReason?: string;
-}
-
-export const mockFulfillmentTasks: FulfillmentTask[] = [
-  {
-    id: 'ft1', taskNo: 'FT20260228001', orderNo: 'ORD20260224001', storeName: '宿迁总店',
-    status: FulfillmentStatus.RECEIVED,
-    items: [
-      { productName: '椰浆', quantity: 10, unit: '盒', picked: true },
-      { productName: '围裙', quantity: 5, unit: '件', picked: true },
-    ],
-    operator: '仓库李', createdAt: '2026-02-28 13:00:00',
-    pickedAt: '2026-02-28 14:00:00', shippedAt: '2026-02-28 16:00:00', receivedAt: '2026-03-01 10:00:00',
-  },
-  {
-    id: 'ft2', taskNo: 'FT20260301001', orderNo: 'ORD20260225002', storeName: '宿迁1号店',
-    status: FulfillmentStatus.PICKING,
-    items: [
-      { productName: '白砂糖', quantity: 3, unit: '袋', picked: true },
-      { productName: '一次性杯子', quantity: 2, unit: '箱', picked: false },
-      { productName: '吸管', quantity: 1, unit: '箱', picked: false },
-    ],
-    operator: '仓库张', createdAt: '2026-03-01 08:00:00',
-  },
-  {
-    id: 'ft3', taskNo: 'FT20260301002', orderNo: 'ORD20260225001', storeName: '宿迁总店',
-    status: FulfillmentStatus.ABNORMAL,
-    items: [
-      { productName: '封口机', quantity: 2, unit: '台', picked: true },
-      { productName: '红茶茶叶', quantity: 5, unit: '袋', picked: true },
-    ],
-    operator: '仓库李', createdAt: '2026-03-01 09:00:00',
-    abnormalReason: '封口机实际到货仅1台，与采购单不符',
-  },
 ];
 
 // ============ Finance Records ============
@@ -398,7 +360,7 @@ export const mockRefunds: RefundRecord[] = [
 export interface NotificationTemplate {
   id: string;
   name: string;
-  type: 'order' | 'procurement' | 'fulfillment' | 'system';
+  type: 'order' | 'procurement' | 'system';
   channel: 'wechat' | 'sms' | 'email';
   content: string;
   enabled: boolean;
@@ -407,7 +369,7 @@ export interface NotificationTemplate {
 export const mockNotificationTemplates: NotificationTemplate[] = [
   { id: 'nt1', name: '订单创建通知', type: 'order', channel: 'wechat', content: '您的订单 {orderNo} 已创建，请及时支付。', enabled: true },
   { id: 'nt2', name: '支付成功通知', type: 'order', channel: 'wechat', content: '订单 {orderNo} 支付成功，金额 ¥{amount}。', enabled: true },
-  { id: 'nt3', name: '发货通知', type: 'fulfillment', channel: 'wechat', content: '您的订单 {orderNo} 已发货，请注意查收。', enabled: true },
+  { id: 'nt3', name: '发货通知', type: 'order', channel: 'wechat', content: '您的订单 {orderNo} 已发货，请注意查收。', enabled: true },
   { id: 'nt4', name: '采购异常通知', type: 'procurement', channel: 'sms', content: '采购单 {poNo} 出现异常：{reason}，请及时处理。', enabled: true },
   { id: 'nt5', name: '库存预警通知', type: 'system', channel: 'email', content: '商品 {productName} 库存低于安全线，当前库存 {stock}。', enabled: false },
 ];
@@ -458,7 +420,7 @@ export interface SystemRole {
 
 export const mockSystemRoles: SystemRole[] = [
   { id: 'r1', name: '超级管理员', description: '拥有所有权限', permissions: ['all'], userCount: 1 },
-  { id: 'r2', name: '仓库管理员', description: '库存管理、出入库操作、拣货发货', permissions: ['inventory', 'fulfillment'], userCount: 1 },
+  { id: 'r2', name: '仓库管理员', description: '库存管理、出入库操作', permissions: ['inventory'], userCount: 1 },
   { id: 'r3', name: '财务专员', description: '财务报表、收款对账、退款管理', permissions: ['finance'], userCount: 1 },
   { id: 'r4', name: '采购专员', description: '采购单管理、供应商管理', permissions: ['procurement', 'supplier'], userCount: 1 },
 ];
@@ -478,7 +440,7 @@ export const mockAuditLogs: AuditLog[] = [
   { id: 'al1', operator: '超级管理员', action: '审核通过', target: '申请订货 APP20260226002', detail: '审核通过宿迁1号店的申请订货', ip: '192.168.1.100', createdAt: '2026-02-27 09:00:00' },
   { id: 'al2', operator: '仓库李', action: '入库操作', target: '入库单 IN20260226001', detail: '椰浆入库30盒', ip: '192.168.1.101', createdAt: '2026-02-26 10:00:00' },
   { id: 'al3', operator: '超级管理员', action: '录入物流成本', target: '订单 ORD20260225002', detail: '录入预估物流成本¥25.00', ip: '192.168.1.100', createdAt: '2026-02-25 11:00:00' },
-  { id: 'al4', operator: '仓库李', action: '拣货完成', target: '出库任务 FT20260228001', detail: '宿迁总店订单拣货完成', ip: '192.168.1.101', createdAt: '2026-02-28 14:00:00' },
+  { id: 'al4', operator: '超级管理员', action: '录入发货信息', target: '订单 ORD20260225002', detail: '录入司机张师傅发货信息', ip: '192.168.1.100', createdAt: '2026-02-27 08:00:00' },
   { id: 'al5', operator: '财务王', action: '退款处理', target: '订单 ORD20260225003', detail: '徐州1号店订单退款¥180.00', ip: '192.168.1.102', createdAt: '2026-02-25 16:30:00' },
 ];
 

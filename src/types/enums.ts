@@ -23,14 +23,11 @@ export enum AuditStatus {
   REJECTED = 'audit_rejected',
 }
 
-// 履约状态
-export enum FulfillmentStatus {
-  NOT_TRANSFERRED = 'ful_not_transferred',
-  PICKING = 'ful_picking',
-  SHIPPING = 'ful_shipping',
-  DELIVERING = 'ful_delivering',
-  RECEIVED = 'ful_received',
-  ABNORMAL = 'ful_abnormal',
+// 发货状态（供应商发货 → 用户收货）
+export enum ShippingStatus {
+  NOT_SHIPPED = 'ship_not_shipped',
+  SHIPPED = 'ship_shipped',
+  RECEIVED = 'ship_received',
 }
 
 // 采购聚合状态
@@ -68,12 +65,9 @@ export const STATUS_CONFIG: Record<string, { label: string; color: 'pending' | '
   [AuditStatus.PENDING]: { label: '待审核', color: 'pending' },
   [AuditStatus.APPROVED]: { label: '已通过', color: 'success' },
   [AuditStatus.REJECTED]: { label: '已驳回', color: 'error' },
-  [FulfillmentStatus.NOT_TRANSFERRED]: { label: '未转出库', color: 'cancelled' },
-  [FulfillmentStatus.PICKING]: { label: '待拣货', color: 'pending' },
-  [FulfillmentStatus.SHIPPING]: { label: '待发货', color: 'processing' },
-  [FulfillmentStatus.DELIVERING]: { label: '配送中', color: 'processing' },
-  [FulfillmentStatus.RECEIVED]: { label: '已签收', color: 'success' },
-  [FulfillmentStatus.ABNORMAL]: { label: '履约异常', color: 'error' },
+  [ShippingStatus.NOT_SHIPPED]: { label: '待发货', color: 'pending' },
+  [ShippingStatus.SHIPPED]: { label: '已发货', color: 'processing' },
+  [ShippingStatus.RECEIVED]: { label: '已收货', color: 'success' },
   [ProcurementAggStatus.TO_SPLIT]: { label: '待拆分', color: 'pending' },
   [ProcurementAggStatus.PROCURING]: { label: '采购中', color: 'processing' },
   [ProcurementAggStatus.READY]: { label: '可出库', color: 'success' },

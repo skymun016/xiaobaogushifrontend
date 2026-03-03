@@ -6,18 +6,25 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Clock, FileText, Truck, DollarSign } from 'lucide-react';
+import { ArrowLeft, Clock, FileText, DollarSign, Truck, Phone, User } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { OrderStatus, PaymentStatus } from '@/types/enums';
+import { OrderStatus, PaymentStatus, ShippingStatus } from '@/types/enums';
 
 export default function OrderDetail() {
   const { id } = useParams();
   const order = mockOrders.find(o => o.id === id);
   const [showLogistics, setShowLogistics] = useState(false);
   const [logisticsCost, setLogisticsCost] = useState('');
+  const [showShipping, setShowShipping] = useState(false);
+
+  // Shipping form state
+  const [driverName, setDriverName] = useState('');
+  const [driverPhone, setDriverPhone] = useState('');
+  const [itemTrackings, setItemTrackings] = useState<Record<string, string>>({});
 
   if (!order) {
     return (
@@ -28,6 +35,19 @@ export default function OrderDetail() {
       </div>
     );
   }
+
+  const handleShippingSubmit = () => {
+    const trackings = Object.entries(itemTrackings).filter(([, v]) => v.trim());
+    if (!driverName.trim() && trackings.length === 0) {
+      toast.error('请至少填写司机信息或物流单号');
+      return;
+    }
+    toast.success('发货信息已保存');
+    setShowShipping(false);
+    setDriverName('');
+    setDriverPhone('');
+    setItemTrackings({});
+  };
 
   return (
     <div className="space-y-6">
@@ -50,8 +70,10 @@ export default function OrderDetail() {
           {order.status === OrderStatus.PENDING && order.paymentStatus === PaymentStatus.PAID && (
             <Button onClick={() => setShowLogistics(true)}>录入物流成本</Button>
           )}
-          {order.status === OrderStatus.PROCESSING && (
-            <Button onClick={() => toast.success('已转出库')}>转出库</Button>
+          {order.paymentStatus === PaymentStatus.PAID && order.shippingStatus === ShippingStatus.NOT_SHIPPED && (
+            <Button onClick={() => setShowShipping(true)}>
+              <Truck className="w-4 h-4 mr-1" />录入发货信息
+            </Button>
           )}
         </div>
       </div>
@@ -74,8 +96,8 @@ export default function OrderDetail() {
         )}
         <Card>
           <CardContent className="p-4">
-            <p className="text-xs text-muted-foreground mb-1">履约状态</p>
-            <StatusBadge status={order.fulfillmentStatus} />
+            <p className="text-xs text-muted-foreground mb-1">发货状态</p>
+            <StatusBadge status={order.shippingStatus} />
           </CardContent>
         </Card>
         <Card>
@@ -122,7 +144,7 @@ export default function OrderDetail() {
           </CardContent>
         </Card>
 
-        {/* Financials & Timeline */}
+        {/* Right column */}
         <div className="space-y-6">
           {/* Financial */}
           <Card>
@@ -163,6 +185,71 @@ export default function OrderDetail() {
               )}
             </CardContent>
           </Card>
+
+          {/* Shipping Info */}
+          {order.shippingInfo && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Truck className="w-4 h-4" /> 发货信息
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {order.shippingInfo.driverName && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <span>司机：{order.shippingInfo.driverName}</span>
+                  </div>
+                )}
+                {order.shippingInfo.driverPhone && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <span>电话：{order.shippingInfo.driverPhone}</span>
+                  </div>
+                )}
+                {order.shippingInfo.itemTrackings && order.shippingInfo.itemTrackings.length > 0 && (
+                  <div className="space-y-1.5">
+                    <p className="text-xs text-muted-foreground font-medium">物流单号</p>
+                    {order.shippingInfo.itemTrackings.map(t => {
+                      const item = order.items.find(i => i.id === t.itemId);
+                      return (
+                        <div key={t.itemId} className="flex justify-between text-xs bg-muted rounded px-2 py-1.5">
+                          <span>{item?.productName || t.itemId}</span>
+                          <span className="font-mono text-primary">{t.trackingNo}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+                {order.shippingInfo.shippingPhotos && order.shippingInfo.shippingPhotos.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground font-medium mb-1.5">发货照片</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {order.shippingInfo.shippingPhotos.map((url, i) => (
+                        <img key={i} src={url} alt={`发货照片${i + 1}`} className="w-20 h-20 rounded-lg object-cover border" />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {order.shippingInfo.receivePhotos && order.shippingInfo.receivePhotos.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground font-medium mb-1.5">收货照片</p>
+                    <div className="flex gap-2 flex-wrap">
+                      {order.shippingInfo.receivePhotos.map((url, i) => (
+                        <img key={i} src={url} alt={`收货照片${i + 1}`} className="w-20 h-20 rounded-lg object-cover border" />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {order.shippingInfo.shippedAt && (
+                  <p className="text-xs text-muted-foreground">发货时间：{formatDateWithDay(order.shippingInfo.shippedAt)}</p>
+                )}
+                {order.shippingInfo.receivedAt && (
+                  <p className="text-xs text-muted-foreground">收货时间：{formatDateWithDay(order.shippingInfo.receivedAt)}</p>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           {/* Timeline */}
           <Card>
@@ -212,6 +299,59 @@ export default function OrderDetail() {
               setShowLogistics(false);
               setLogisticsCost('');
             }}>确认</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Shipping info dialog */}
+      <Dialog open={showShipping} onOpenChange={setShowShipping}>
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>录入发货信息</DialogTitle>
+            <DialogDescription>填写送货司机信息和/或按商品填写物流单号</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {/* Driver info */}
+            <div className="space-y-3 p-3 rounded-lg border">
+              <p className="text-sm font-semibold flex items-center gap-2"><User className="w-4 h-4" /> 司机信息</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-muted-foreground">司机姓名</label>
+                  <Input value={driverName} onChange={e => setDriverName(e.target.value)} placeholder="请输入" />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">联系电话</label>
+                  <Input value={driverPhone} onChange={e => setDriverPhone(e.target.value)} placeholder="请输入" />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">发货备注/照片说明</label>
+                <Textarea placeholder="可在此描述发货情况，实际照片上传待后续接入存储服务" className="mt-1" rows={2} />
+              </div>
+            </div>
+
+            {/* Per-item tracking */}
+            <div className="space-y-3 p-3 rounded-lg border">
+              <p className="text-sm font-semibold flex items-center gap-2"><FileText className="w-4 h-4" /> 商品物流单号</p>
+              {order.items.map(item => (
+                <div key={item.id} className="flex items-center gap-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{item.productName}</p>
+                    <p className="text-xs text-muted-foreground">{item.quantity}{item.unit}</p>
+                  </div>
+                  <Input
+                    className="w-48"
+                    placeholder="物流单号"
+                    value={itemTrackings[item.id] || ''}
+                    onChange={e => setItemTrackings(prev => ({ ...prev, [item.id]: e.target.value }))}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowShipping(false)}>取消</Button>
+            <Button onClick={handleShippingSubmit}>确认发货</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

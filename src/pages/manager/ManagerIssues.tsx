@@ -1,4 +1,4 @@
-import { mockFulfillmentTasks, mockPurchaseOrders } from '@/mock/data';
+import { mockPurchaseOrders } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,14 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { AlertTriangle, Send } from 'lucide-react';
-import { FulfillmentStatus, PurchaseOrderStatus } from '@/types/enums';
+import { PurchaseOrderStatus } from '@/types/enums';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
 export default function ManagerIssues() {
   const [showReport, setShowReport] = useState(false);
 
-  const abnormalTasks = mockFulfillmentTasks.filter(t => t.status === FulfillmentStatus.ABNORMAL);
   const abnormalPOs = mockPurchaseOrders.filter(po => po.status === PurchaseOrderStatus.ABNORMAL);
 
   return (
@@ -25,26 +24,6 @@ export default function ManagerIssues() {
       <Button className="w-full" onClick={() => setShowReport(true)}>
         <Send className="w-4 h-4 mr-2" />上报新异常
       </Button>
-
-      {abnormalTasks.length > 0 && (
-        <div>
-          <h2 className="text-sm font-semibold mb-2 text-status-error">履约异常 ({abnormalTasks.length})</h2>
-          {abnormalTasks.map(t => (
-            <Card key={t.id} className="mb-2">
-              <CardContent className="p-3">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-muted-foreground">{t.taskNo}</span>
-                  <StatusBadge status={t.status} />
-                </div>
-                <p className="text-sm font-medium">{t.storeName} - {t.orderNo}</p>
-                <p className="text-xs text-status-error mt-1 flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" />{t.abnormalReason}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
 
       {abnormalPOs.length > 0 && (
         <div>
@@ -66,7 +45,7 @@ export default function ManagerIssues() {
         </div>
       )}
 
-      {abnormalTasks.length === 0 && abnormalPOs.length === 0 && (
+      {abnormalPOs.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
           <AlertTriangle className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>暂无异常</p>

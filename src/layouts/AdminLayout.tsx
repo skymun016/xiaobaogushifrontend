@@ -3,8 +3,8 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/lib/store';
 import {
-  LayoutDashboard, Package, Warehouse, ShoppingCart, Truck, Users, FileText,
-  DollarSign, Bell, Settings, ChevronLeft, ChevronRight, LogOut, Menu, Smartphone
+  LayoutDashboard, Package, Warehouse, ShoppingCart, Users, FileText,
+  DollarSign, Bell, Settings, LogOut, Menu, Smartphone
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
@@ -16,7 +16,6 @@ const navItems = [
   { label: '订单中心', icon: ShoppingCart, path: '/admin/orders' },
   { label: '供应商中心', icon: Users, path: '/admin/suppliers' },
   { label: '采购单中心', icon: FileText, path: '/admin/procurement' },
-  { label: '履约配送', icon: Truck, path: '/admin/fulfillment' },
   { label: '财务中心', icon: DollarSign, path: '/admin/finance' },
   { label: '通知系统', icon: Bell, path: '/admin/notifications' },
   { label: '小程序管理', icon: Smartphone, path: '/admin/miniprogram' },
@@ -50,7 +49,6 @@ export default function AdminLayout() {
       'flex flex-col h-full bg-sidebar text-sidebar-foreground transition-all duration-300',
       collapsed ? 'w-16' : 'w-60'
     )}>
-      {/* Logo */}
       <div className="flex items-center h-14 px-4">
         {!collapsed && (
           <h1 className="text-lg font-bold text-sidebar-foreground tracking-tight whitespace-nowrap">
@@ -59,8 +57,6 @@ export default function AdminLayout() {
         )}
         {collapsed && <Package className="w-6 h-6 text-sidebar-primary mx-auto" />}
       </div>
-
-      {/* Nav */}
       <nav className="flex-1 py-4 overflow-y-auto scrollbar-thin">
         {navItems.map((item) => (
           <Link
@@ -79,8 +75,6 @@ export default function AdminLayout() {
           </Link>
         ))}
       </nav>
-
-      {/* User */}
       <div className="p-4">
         <div className={cn('flex items-center', collapsed ? 'justify-center' : 'gap-3')}>
           <div className="w-8 h-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-sm font-medium shrink-0">
@@ -104,12 +98,9 @@ export default function AdminLayout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
-
-      {/* Sidebar - Desktop */}
       <aside
         className="hidden lg:flex h-full shrink-0"
         onMouseEnter={handleMouseEnter}
@@ -117,18 +108,13 @@ export default function AdminLayout() {
       >
         {sidebar}
       </aside>
-
-      {/* Sidebar - Mobile */}
       <aside className={cn(
         'fixed inset-y-0 left-0 z-50 lg:hidden transition-transform duration-300',
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
       )}>
         {sidebar}
       </aside>
-
-      {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
         <header className="h-14 border-b bg-card flex items-center px-4 gap-4 shrink-0">
           <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(true)}>
             <Menu className="w-5 h-5" />
@@ -139,8 +125,6 @@ export default function AdminLayout() {
           </span>
           <ThemeSwitcher />
         </header>
-
-        {/* Content */}
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>

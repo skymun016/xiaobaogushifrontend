@@ -1,12 +1,11 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { LayoutDashboard, ClipboardCheck, AlertTriangle, Truck, User } from 'lucide-react';
+import { LayoutDashboard, ClipboardCheck, AlertTriangle, User } from 'lucide-react';
 
 const tabs = [
   { label: '工作台', icon: LayoutDashboard, path: '/manager' },
   { label: '审核', icon: ClipboardCheck, path: '/manager/applications' },
   { label: '异常', icon: AlertTriangle, path: '/manager/issues' },
-  { label: '配送', icon: Truck, path: '/manager/delivery' },
   { label: '我的', icon: User, path: '/manager/profile' },
 ];
 

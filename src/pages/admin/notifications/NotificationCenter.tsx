@@ -17,7 +17,7 @@ export default function NotificationCenter() {
   const [showAdd, setShowAdd] = useState(false);
 
   const channelLabel = (ch: string) => ch === 'wechat' ? '微信' : ch === 'sms' ? '短信' : '邮件';
-  const typeLabel = (t: string) => ({ order: '订单', procurement: '采购', fulfillment: '履约', system: '系统' }[t] || t);
+  const typeLabel = (t: string) => ({ order: '订单', procurement: '采购', system: '系统' }[t] || t);
 
   return (
     <div className="space-y-6">

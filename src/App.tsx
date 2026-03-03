@@ -14,7 +14,6 @@ import ProductList from "./pages/admin/products/ProductList";
 import InventoryCenter from "./pages/admin/inventory/InventoryCenter";
 import SupplierCenter from "./pages/admin/suppliers/SupplierCenter";
 import ProcurementCenter from "./pages/admin/procurement/ProcurementCenter";
-import FulfillmentCenter from "./pages/admin/fulfillment/FulfillmentCenter";
 import FinanceCenter from "./pages/admin/finance/FinanceCenter";
 import NotificationCenter from "./pages/admin/notifications/NotificationCenter";
 import SettingsCenter from "./pages/admin/settings/SettingsCenter";
@@ -30,7 +29,6 @@ import ManagerLayout from "./layouts/ManagerLayout";
 import ManagerDashboard from "./pages/manager/ManagerDashboard";
 import ManagerApplications from "./pages/manager/ManagerApplications";
 import ManagerIssues from "./pages/manager/ManagerIssues";
-import ManagerDelivery from "./pages/manager/ManagerDelivery";
 import ManagerProfile from "./pages/manager/ManagerProfile";
 import MobileLogin from "./pages/mobile/MobileLogin";
 const queryClient = new QueryClient();
@@ -55,7 +53,6 @@ const App = () => (
             <Route path="inventory" element={<InventoryCenter />} />
             <Route path="suppliers" element={<SupplierCenter />} />
             <Route path="procurement" element={<ProcurementCenter />} />
-            <Route path="fulfillment" element={<FulfillmentCenter />} />
             <Route path="finance" element={<FinanceCenter />} />
             <Route path="notifications" element={<NotificationCenter />} />
             <Route path="settings" element={<SettingsCenter />} />
@@ -80,7 +77,6 @@ const App = () => (
             <Route index element={<ManagerDashboard />} />
             <Route path="applications" element={<ManagerApplications />} />
             <Route path="issues" element={<ManagerIssues />} />
-            <Route path="delivery" element={<ManagerDelivery />} />
             <Route path="profile" element={<ManagerProfile />} />
           </Route>
 

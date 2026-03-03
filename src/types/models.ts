@@ -1,4 +1,4 @@
-import { OrderStatus, PaymentStatus, AuditStatus, FulfillmentStatus, ProcurementAggStatus } from './enums';
+import { OrderStatus, PaymentStatus, AuditStatus, ShippingStatus, ProcurementAggStatus } from './enums';
 
 export interface OrderItem {
   id: string;
@@ -19,6 +19,23 @@ export interface OrderTimeline {
   operator?: string;
 }
 
+// 商品级物流信息
+export interface ItemShippingInfo {
+  itemId: string;
+  trackingNo?: string;
+}
+
+// 订单级物流/发货信息
+export interface ShippingInfo {
+  driverName?: string;
+  driverPhone?: string;
+  shippingPhotos?: string[];       // 发货时照片URL
+  itemTrackings?: ItemShippingInfo[]; // 按商品填写物流单号
+  receivePhotos?: string[];         // 用户收货确认照片
+  shippedAt?: string;
+  receivedAt?: string;
+}
+
 export interface Order {
   id: string;
   orderNo: string;
@@ -27,7 +44,7 @@ export interface Order {
   status: OrderStatus;
   paymentStatus: PaymentStatus;
   auditStatus?: AuditStatus;
-  fulfillmentStatus: FulfillmentStatus;
+  shippingStatus: ShippingStatus;
   procurementStatus: ProcurementAggStatus;
   items: OrderItem[];
   totalSalePrice: number;
@@ -41,6 +58,7 @@ export interface Order {
   paidAt?: string;
   timeline: OrderTimeline[];
   remark?: string;
+  shippingInfo?: ShippingInfo;
 }
 
 export interface Product {

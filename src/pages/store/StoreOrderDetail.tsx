@@ -4,16 +4,18 @@ import { mockOrders } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Clock, FileText, Truck, Phone, User, Camera, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Clock, FileText, Truck, Phone, User, CheckCircle } from 'lucide-react';
 import { ShippingStatus } from '@/types/enums';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { PhotoUpload } from '@/components/PhotoUpload';
 
 export default function StoreOrderDetail() {
   const { id } = useParams();
   const order = mockOrders.find(o => o.id === id);
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [receivePhotos, setReceivePhotos] = useState<string[]>([]);
 
   if (!order) {
     return (
@@ -28,6 +30,10 @@ export default function StoreOrderDetail() {
   const canConfirmReceive = order.shippingStatus === ShippingStatus.SHIPPED && !confirmed;
 
   const handleConfirmReceive = () => {
+    if (receivePhotos.length === 0) {
+      toast.error('请至少上传一张收货照片');
+      return;
+    }
     toast.success('已确认收货！');
     setConfirmed(true);
     setShowConfirm(false);
@@ -62,7 +68,7 @@ export default function StoreOrderDetail() {
                 </div>
               </div>
               <Button className="w-full" onClick={() => setShowConfirm(true)}>
-                <Camera className="w-4 h-4 mr-1" /> 拍照确认收货
+                <Truck className="w-4 h-4 mr-1" /> 确认收货
               </Button>
             </CardContent>
           </Card>
@@ -214,13 +220,14 @@ export default function StoreOrderDetail() {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50" onClick={() => setShowConfirm(false)}>
           <div className="w-full max-w-md bg-background rounded-t-2xl p-6 space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-bold">确认收货</h3>
-            <p className="text-sm text-muted-foreground">请拍照上传收货凭证（当前为演示模式，点击确认即可）</p>
+            <p className="text-sm text-muted-foreground">请拍照上传收货凭证，确认商品已收到</p>
             
-            <div className="border-2 border-dashed border-border rounded-xl p-8 flex flex-col items-center gap-2 text-muted-foreground">
-              <Camera className="w-8 h-8 opacity-40" />
-              <p className="text-sm">点击拍照或上传照片</p>
-              <p className="text-xs">（接入存储服务后可用）</p>
-            </div>
+            <PhotoUpload
+              folder={`receive/${order.id}`}
+              photos={receivePhotos}
+              onChange={setReceivePhotos}
+              maxPhotos={5}
+            />
 
             <div className="flex gap-3">
               <Button variant="outline" className="flex-1" onClick={() => setShowConfirm(false)}>取消</Button>

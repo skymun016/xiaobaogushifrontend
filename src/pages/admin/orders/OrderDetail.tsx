@@ -9,10 +9,10 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Clock, FileText, DollarSign, Truck, Phone, User } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { OrderStatus, PaymentStatus, ShippingStatus } from '@/types/enums';
+import { PhotoUpload } from '@/components/PhotoUpload';
 
 export default function OrderDetail() {
   const { id } = useParams();
@@ -25,6 +25,7 @@ export default function OrderDetail() {
   const [driverName, setDriverName] = useState('');
   const [driverPhone, setDriverPhone] = useState('');
   const [itemTrackings, setItemTrackings] = useState<Record<string, string>>({});
+  const [shippingPhotos, setShippingPhotos] = useState<string[]>([]);
 
   if (!order) {
     return (
@@ -47,6 +48,7 @@ export default function OrderDetail() {
     setDriverName('');
     setDriverPhone('');
     setItemTrackings({});
+    setShippingPhotos([]);
   };
 
   return (
@@ -325,8 +327,14 @@ export default function OrderDetail() {
                 </div>
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">发货备注/照片说明</label>
-                <Textarea placeholder="可在此描述发货情况，实际照片上传待后续接入存储服务" className="mt-1" rows={2} />
+                <label className="text-xs text-muted-foreground">发货照片</label>
+                <PhotoUpload
+                  folder={`shipping/${order.id}`}
+                  photos={shippingPhotos}
+                  onChange={setShippingPhotos}
+                  maxPhotos={6}
+                  className="mt-1"
+                />
               </div>
             </div>
 

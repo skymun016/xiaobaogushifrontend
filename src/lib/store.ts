@@ -14,7 +14,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoggedIn: false,
   role: null,
   userName: '',
-  storeName: '朝阳门店',
+  storeName: '宿迁总店',
   login: (role, userName) => set({ isLoggedIn: true, role, userName }),
   logout: () => set({ isLoggedIn: false, role: null, userName: '' }),
 }));

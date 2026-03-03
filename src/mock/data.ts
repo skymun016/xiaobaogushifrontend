@@ -6,9 +6,11 @@ import {
 
 // ============ Stores ============
 export const mockStores: Store[] = [
-  { id: 's1', name: '朝阳门店', contactPerson: '张三', phone: '13800138001', address: '北京市朝阳区建国路88号' },
-  { id: 's2', name: '海淀门店', contactPerson: '李四', phone: '13800138002', address: '北京市海淀区中关村大街1号' },
-  { id: 's3', name: '西城门店', contactPerson: '王五', phone: '13800138003', address: '北京市西城区金融街10号' },
+  { id: 's1', name: '宿迁总店', contactPerson: '张三', phone: '13800138001', address: '江苏省宿迁市宿城区发展大道88号' },
+  { id: 's2', name: '宿迁1号店', contactPerson: '李四', phone: '13800138002', address: '江苏省宿迁市宿豫区江山大道1号' },
+  { id: 's3', name: '宿迁2号店', contactPerson: '王五', phone: '13800138003', address: '江苏省宿迁市沭阳县上海路10号' },
+  { id: 's4', name: '徐州1号店', contactPerson: '赵六', phone: '13800138004', address: '江苏省徐州市云龙区和平路66号' },
+  { id: 's5', name: '徐州2号店', contactPerson: '钱七', phone: '13800138005', address: '江苏省徐州市铜山区大学路18号' },
 ];
 
 // ============ Categories ============
@@ -85,7 +87,7 @@ const createTimeline = (status: OrderStatus, isApp: boolean): OrderTimeline[] =>
 
 export const mockOrders: Order[] = [
   {
-    id: 'o1', orderNo: 'ORD20260225001', storeId: 's1', storeName: '朝阳门店',
+    id: 'o1', orderNo: 'ORD20260225001', storeId: 's1', storeName: '宿迁总店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
     items: [
@@ -97,7 +99,7 @@ export const mockOrders: Order[] = [
     createdAt: '2026-02-25 09:30:00', timeline: createTimeline(OrderStatus.PENDING, false),
   },
   {
-    id: 'o2', orderNo: 'ORD20260225002', storeId: 's2', storeName: '海淀门店',
+    id: 'o2', orderNo: 'ORD20260225002', storeId: 's2', storeName: '宿迁1号店',
     status: OrderStatus.PROCESSING, paymentStatus: PaymentStatus.PAID,
     fulfillmentStatus: FulfillmentStatus.PICKING, procurementStatus: ProcurementAggStatus.READY,
     items: [
@@ -111,7 +113,7 @@ export const mockOrders: Order[] = [
     timeline: createTimeline(OrderStatus.PROCESSING, false),
   },
   {
-    id: 'o3', orderNo: 'ORD20260224001', storeId: 's1', storeName: '朝阳门店',
+    id: 'o3', orderNo: 'ORD20260224001', storeId: 's1', storeName: '宿迁总店',
     status: OrderStatus.COMPLETED, paymentStatus: PaymentStatus.PAID,
     fulfillmentStatus: FulfillmentStatus.RECEIVED, procurementStatus: ProcurementAggStatus.CLOSED,
     items: [
@@ -124,7 +126,7 @@ export const mockOrders: Order[] = [
     timeline: createTimeline(OrderStatus.COMPLETED, false),
   },
   {
-    id: 'o4', orderNo: 'APP20260226001', storeId: 's3', storeName: '西城门店',
+    id: 'o4', orderNo: 'APP20260226001', storeId: 's3', storeName: '宿迁2号店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
     auditStatus: AuditStatus.PENDING,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
@@ -137,7 +139,7 @@ export const mockOrders: Order[] = [
     remark: '急需，请优先处理',
   },
   {
-    id: 'o5', orderNo: 'APP20260226002', storeId: 's2', storeName: '海淀门店',
+    id: 'o5', orderNo: 'APP20260226002', storeId: 's2', storeName: '宿迁1号店',
     status: OrderStatus.PENDING, paymentStatus: PaymentStatus.UNPAID,
     auditStatus: AuditStatus.APPROVED,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.TO_SPLIT,
@@ -154,7 +156,7 @@ export const mockOrders: Order[] = [
     ],
   },
   {
-    id: 'o6', orderNo: 'ORD20260225003', storeId: 's3', storeName: '西城门店',
+    id: 'o6', orderNo: 'ORD20260225003', storeId: 's4', storeName: '徐州1号店',
     status: OrderStatus.CANCELLED, paymentStatus: PaymentStatus.REFUNDED,
     fulfillmentStatus: FulfillmentStatus.NOT_TRANSFERRED, procurementStatus: ProcurementAggStatus.CLOSED,
     items: [
@@ -297,7 +299,7 @@ export interface FulfillmentTask {
 
 export const mockFulfillmentTasks: FulfillmentTask[] = [
   {
-    id: 'ft1', taskNo: 'FT20260228001', orderNo: 'ORD20260224001', storeName: '朝阳门店',
+    id: 'ft1', taskNo: 'FT20260228001', orderNo: 'ORD20260224001', storeName: '宿迁总店',
     status: FulfillmentStatus.RECEIVED,
     items: [
       { productName: '椰浆', quantity: 10, unit: '盒', picked: true },
@@ -307,7 +309,7 @@ export const mockFulfillmentTasks: FulfillmentTask[] = [
     pickedAt: '2026-02-28 14:00:00', shippedAt: '2026-02-28 16:00:00', receivedAt: '2026-03-01 10:00:00',
   },
   {
-    id: 'ft2', taskNo: 'FT20260301001', orderNo: 'ORD20260225002', storeName: '海淀门店',
+    id: 'ft2', taskNo: 'FT20260301001', orderNo: 'ORD20260225002', storeName: '宿迁1号店',
     status: FulfillmentStatus.PICKING,
     items: [
       { productName: '白砂糖', quantity: 3, unit: '袋', picked: true },
@@ -317,7 +319,7 @@ export const mockFulfillmentTasks: FulfillmentTask[] = [
     operator: '仓库张', createdAt: '2026-03-01 08:00:00',
   },
   {
-    id: 'ft3', taskNo: 'FT20260301002', orderNo: 'ORD20260225001', storeName: '朝阳门店',
+    id: 'ft3', taskNo: 'FT20260301002', orderNo: 'ORD20260225001', storeName: '宿迁总店',
     status: FulfillmentStatus.ABNORMAL,
     items: [
       { productName: '封口机', quantity: 2, unit: '台', picked: true },
@@ -341,9 +343,9 @@ export interface PaymentRecord {
 }
 
 export const mockPaymentRecords: PaymentRecord[] = [
-  { id: 'pay1', orderNo: 'ORD20260224001', storeName: '朝阳门店', amount: 395, method: 'wechat', transactionNo: 'WX20260224001', status: 'success', paidAt: '2026-02-24 08:15:00' },
-  { id: 'pay2', orderNo: 'ORD20260225002', storeName: '海淀门店', amount: 762, method: 'wechat', transactionNo: 'WX20260225001', status: 'success', paidAt: '2026-02-25 10:30:00' },
-  { id: 'pay3', orderNo: 'ORD20260225003', storeName: '西城门店', amount: 180, method: 'wechat', transactionNo: 'WX20260225002', status: 'refunded', paidAt: '2026-02-25 14:10:00' },
+  { id: 'pay1', orderNo: 'ORD20260224001', storeName: '宿迁总店', amount: 395, method: 'wechat', transactionNo: 'WX20260224001', status: 'success', paidAt: '2026-02-24 08:15:00' },
+  { id: 'pay2', orderNo: 'ORD20260225002', storeName: '宿迁1号店', amount: 762, method: 'wechat', transactionNo: 'WX20260225001', status: 'success', paidAt: '2026-02-25 10:30:00' },
+  { id: 'pay3', orderNo: 'ORD20260225003', storeName: '徐州1号店', amount: 180, method: 'wechat', transactionNo: 'WX20260225002', status: 'refunded', paidAt: '2026-02-25 14:10:00' },
 ];
 
 export interface RefundRecord {
@@ -358,7 +360,7 @@ export interface RefundRecord {
 }
 
 export const mockRefunds: RefundRecord[] = [
-  { id: 'ref1', orderNo: 'ORD20260225003', storeName: '西城门店', amount: 180, reason: '门店取消订单', status: 'completed', createdAt: '2026-02-25 16:00:00', completedAt: '2026-02-25 16:30:00' },
+  { id: 'ref1', orderNo: 'ORD20260225003', storeName: '徐州1号店', amount: 180, reason: '门店取消订单', status: 'completed', createdAt: '2026-02-25 16:00:00', completedAt: '2026-02-25 16:30:00' },
 ];
 
 // ============ Notification ============
@@ -390,10 +392,10 @@ export interface NotificationLog {
 }
 
 export const mockNotificationLogs: NotificationLog[] = [
-  { id: 'nl1', templateName: '订单创建通知', target: '朝阳门店-张三', channel: 'wechat', status: 'sent', content: '您的订单 ORD20260225001 已创建，请及时支付。', sentAt: '2026-02-25 09:30:05' },
-  { id: 'nl2', templateName: '支付成功通知', target: '海淀门店-李四', channel: 'wechat', status: 'sent', content: '订单 ORD20260225002 支付成功，金额 ¥762.00。', sentAt: '2026-02-25 10:30:10' },
+  { id: 'nl1', templateName: '订单创建通知', target: '宿迁总店-张三', channel: 'wechat', status: 'sent', content: '您的订单 ORD20260225001 已创建，请及时支付。', sentAt: '2026-02-25 09:30:05' },
+  { id: 'nl2', templateName: '支付成功通知', target: '宿迁1号店-李四', channel: 'wechat', status: 'sent', content: '订单 ORD20260225002 支付成功，金额 ¥762.00。', sentAt: '2026-02-25 10:30:10' },
   { id: 'nl3', templateName: '采购异常通知', target: '管理员', channel: 'sms', status: 'sent', content: '采购单 PO20260225003 出现异常：供应商库存不足。', sentAt: '2026-02-26 09:01:00' },
-  { id: 'nl4', templateName: '发货通知', target: '朝阳门店-张三', channel: 'wechat', status: 'sent', content: '您的订单 ORD20260224001 已发货，请注意查收。', sentAt: '2026-02-28 16:00:05' },
+  { id: 'nl4', templateName: '发货通知', target: '宿迁总店-张三', channel: 'wechat', status: 'sent', content: '您的订单 ORD20260224001 已发货，请注意查收。', sentAt: '2026-02-28 16:00:05' },
   { id: 'nl5', templateName: '库存预警通知', target: '管理员', channel: 'email', status: 'failed', content: '商品 果糖机 库存低于安全线，当前库存 10。', sentAt: '2026-02-28 08:00:00' },
 ];
 
@@ -442,11 +444,11 @@ export interface AuditLog {
 }
 
 export const mockAuditLogs: AuditLog[] = [
-  { id: 'al1', operator: '超级管理员', action: '审核通过', target: '申请订货 APP20260226002', detail: '审核通过海淀门店的申请订货', ip: '192.168.1.100', createdAt: '2026-02-27 09:00:00' },
+  { id: 'al1', operator: '超级管理员', action: '审核通过', target: '申请订货 APP20260226002', detail: '审核通过宿迁1号店的申请订货', ip: '192.168.1.100', createdAt: '2026-02-27 09:00:00' },
   { id: 'al2', operator: '仓库李', action: '入库操作', target: '入库单 IN20260226001', detail: '椰浆入库30盒', ip: '192.168.1.101', createdAt: '2026-02-26 10:00:00' },
   { id: 'al3', operator: '超级管理员', action: '录入物流成本', target: '订单 ORD20260225002', detail: '录入预估物流成本¥25.00', ip: '192.168.1.100', createdAt: '2026-02-25 11:00:00' },
-  { id: 'al4', operator: '仓库李', action: '拣货完成', target: '出库任务 FT20260228001', detail: '朝阳门店订单拣货完成', ip: '192.168.1.101', createdAt: '2026-02-28 14:00:00' },
-  { id: 'al5', operator: '财务王', action: '退款处理', target: '订单 ORD20260225003', detail: '西城门店订单退款¥180.00', ip: '192.168.1.102', createdAt: '2026-02-25 16:30:00' },
+  { id: 'al4', operator: '仓库李', action: '拣货完成', target: '出库任务 FT20260228001', detail: '宿迁总店订单拣货完成', ip: '192.168.1.101', createdAt: '2026-02-28 14:00:00' },
+  { id: 'al5', operator: '财务王', action: '退款处理', target: '订单 ORD20260225003', detail: '徐州1号店订单退款¥180.00', ip: '192.168.1.102', createdAt: '2026-02-25 16:30:00' },
 ];
 
 // ============ Dashboard Stats ============
@@ -482,9 +484,11 @@ export const mockProfitByProduct = [
 ];
 
 export const mockProfitByStore = [
-  { storeName: '朝阳门店', orderCount: 5, revenue: 8700, cost: 4500, logistics: 68, profit: 4132, margin: 47.5 },
-  { storeName: '海淀门店', orderCount: 4, revenue: 7620, cost: 4200, logistics: 50, profit: 3370, margin: 44.2 },
-  { storeName: '西城门店', orderCount: 3, revenue: 5960, cost: 3100, logistics: 30, profit: 2830, margin: 47.5 },
+  { storeName: '宿迁总店', orderCount: 5, revenue: 8700, cost: 4500, logistics: 68, profit: 4132, margin: 47.5 },
+  { storeName: '宿迁1号店', orderCount: 4, revenue: 7620, cost: 4200, logistics: 50, profit: 3370, margin: 44.2 },
+  { storeName: '宿迁2号店', orderCount: 3, revenue: 5960, cost: 3100, logistics: 30, profit: 2830, margin: 47.5 },
+  { storeName: '徐州1号店', orderCount: 2, revenue: 4200, cost: 2100, logistics: 40, profit: 2060, margin: 49.0 },
+  { storeName: '徐州2号店', orderCount: 1, revenue: 1980, cost: 1050, logistics: 20, profit: 910, margin: 46.0 },
 ];
 
 // ============ Helpers ============

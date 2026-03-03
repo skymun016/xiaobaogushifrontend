@@ -22,7 +22,7 @@ export default function StoreProfile() {
             <User className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="text-lg font-bold">朝阳门店</h2>
+            <h2 className="text-lg font-bold">宿迁总店</h2>
             <p className="text-sm opacity-70">张三 · 13800138001</p>
           </div>
         </div>

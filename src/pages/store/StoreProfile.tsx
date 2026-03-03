@@ -16,14 +16,14 @@ export default function StoreProfile() {
   return (
     <div className="bg-muted min-h-full">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground px-5 pt-8 pb-5 sticky top-0 z-20">
+      <div className="bg-background border-b border-border/50 px-5 pt-8 pb-5 sticky top-0 z-20">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary-foreground/15 flex items-center justify-center">
-            <User className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <User className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h2 className="text-xl font-bold">宿迁总店</h2>
-            <p className="text-sm text-primary-foreground/60 mt-0.5">张三 · 13800138001</p>
+            <h2 className="text-xl font-bold text-foreground">宿迁总店</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">张三 · 13800138001</p>
           </div>
         </div>
       </div>

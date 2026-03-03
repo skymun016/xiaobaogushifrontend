@@ -21,8 +21,8 @@ export default function StoreOrders() {
 
   return (
     <div className="bg-muted min-h-full">
-      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-3 sticky top-0 z-20">
-        <h1 className="text-lg font-bold">我的订单</h1>
+      <div className="bg-background border-b border-border/50 px-4 pt-4 pb-3 sticky top-0 z-20">
+        <h1 className="text-lg font-bold text-foreground">我的订单</h1>
       </div>
       <div className="p-4">
 

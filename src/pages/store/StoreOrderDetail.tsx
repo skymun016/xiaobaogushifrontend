@@ -23,15 +23,15 @@ export default function StoreOrderDetail() {
   return (
     <div className="pb-4">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground p-4 sticky top-0 z-20">
+      <div className="bg-background border-b border-border/50 p-4 sticky top-0 z-20">
         <div className="flex items-center gap-3 mb-3">
-          <Link to="/store/orders"><ArrowLeft className="w-5 h-5" /></Link>
-          <h1 className="text-base font-bold">订单详情</h1>
+          <Link to="/store/orders" className="text-foreground"><ArrowLeft className="w-5 h-5" /></Link>
+          <h1 className="text-base font-bold text-foreground">订单详情</h1>
         </div>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm opacity-80">{order.orderNo}</p>
-            <StatusBadge status={order.status} className="mt-1 bg-primary-foreground/20 text-primary-foreground" />
+            <p className="text-sm text-muted-foreground">{order.orderNo}</p>
+            <StatusBadge status={order.status} className="mt-1" />
           </div>
         </div>
       </div>

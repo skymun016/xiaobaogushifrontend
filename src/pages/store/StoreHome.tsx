@@ -24,13 +24,13 @@ export default function StoreHome() {
   return (
     <div className="bg-muted min-h-full">
       {/* Fixed Header */}
-      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-4 sticky top-0 z-20">
+      <div className="bg-background border-b border-border/50 px-4 pt-4 pb-4 sticky top-0 z-20">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-lg font-bold tracking-tight">宿迁总店</h1>
-            <p className="text-primary-foreground/60 text-xs mt-0.5">欢迎使用小堡故事订货系统</p>
+            <h1 className="text-lg font-bold tracking-tight text-foreground">宿迁总店</h1>
+            <p className="text-muted-foreground text-xs mt-0.5">欢迎使用小堡故事订货系统</p>
           </div>
-          <Link to="/store/cart" className="relative p-2 -mr-2 rounded-full hover:bg-primary-foreground/10 transition-colors">
+          <Link to="/store/cart" className="relative p-2 -mr-2 rounded-full hover:bg-muted transition-colors text-foreground">
             <ShoppingCart className="w-5 h-5" />
             {cartCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
@@ -41,11 +41,11 @@ export default function StoreHome() {
         </div>
 
         {/* Time hint */}
-        <div className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-3 text-xs mb-3">
-          <div className="w-7 h-7 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0">
-            <Clock className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2 bg-primary/10 rounded-xl p-3 text-xs mb-3">
+          <div className="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+            <Clock className="w-3.5 h-3.5 text-primary" />
           </div>
-          <span className="leading-relaxed">{getOrderTimeHint()}</span>
+          <span className="leading-relaxed text-foreground">{getOrderTimeHint()}</span>
         </div>
 
         {/* Search bar */}
@@ -55,7 +55,7 @@ export default function StoreHome() {
             placeholder="搜索商品名称..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="pl-10 h-10 rounded-xl bg-primary-foreground/15 shadow-sm border-0 text-sm text-primary-foreground placeholder:text-primary-foreground/40"
+            className="pl-10 h-10 rounded-xl bg-muted shadow-sm border-0 text-sm"
           />
         </div>
       </div>

@@ -24,8 +24,8 @@ export default function StoreCategories() {
 
   return (
     <div className="flex flex-col h-full bg-muted">
-      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-3 sticky top-0 z-20">
-        <h1 className="text-lg font-bold">商品分类</h1>
+      <div className="bg-background border-b border-border/50 px-4 pt-4 pb-3 sticky top-0 z-20">
+        <h1 className="text-lg font-bold text-foreground">商品分类</h1>
       </div>
       <div className="flex flex-1 overflow-hidden">
       {/* Category sidebar */}

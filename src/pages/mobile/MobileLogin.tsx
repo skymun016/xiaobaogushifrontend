@@ -47,19 +47,18 @@ export default function MobileLogin() {
   return (
     <div className="max-w-md mx-auto min-h-screen bg-muted flex flex-col">
       {/* Header */}
-      <div className="bg-primary text-primary-foreground px-6 pt-16 pb-12 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary-foreground)/0.08),transparent_50%)]" />
+      <div className="bg-background px-6 pt-16 pb-12 text-center relative overflow-hidden">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
           className="relative"
         >
-          <div className="w-18 h-18 bg-primary-foreground/10 rounded-3xl flex items-center justify-center mx-auto mb-4 w-[72px] h-[72px]">
-            <Package className="w-9 h-9" />
+          <div className="w-[72px] h-[72px] bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-4">
+            <Package className="w-9 h-9 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">小堡故事</h1>
-          <p className="text-primary-foreground/50 text-sm mt-1">订货管理系统</p>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">小堡故事</h1>
+          <p className="text-muted-foreground text-sm mt-1">订货管理系统</p>
         </motion.div>
       </div>
 

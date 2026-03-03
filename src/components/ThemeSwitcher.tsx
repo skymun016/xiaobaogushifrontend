@@ -38,13 +38,13 @@ const presets: ThemePreset[] = [
     id: 'teal',
     name: '青翠绿',
     colors: {
-      primary: '172 66% 38%',
+      primary: '172 66% 32%',
       accent: '24 95% 58%',
-      sidebarBg: '172 55% 22%',
+      sidebarBg: '172 60% 18%',
       sidebarFg: '172 20% 92%',
-      background: '170 22% 91%',
+      background: '170 28% 85%',
     },
-    preview: { bg: '#d6e5e2', sidebar: '#194d45', accent: '#f09836' },
+    preview: { bg: '#b8d4cf', sidebar: '#123d36', accent: '#f09836' },
   },
   {
     id: 'indigo',

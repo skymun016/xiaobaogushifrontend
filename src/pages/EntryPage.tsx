@@ -29,7 +29,7 @@ export default function EntryPage() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/store')}>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/mobile/login')}>
           <CardContent className="p-6 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-status-success/10 flex items-center justify-center shrink-0">
               <Smartphone className="w-6 h-6 text-status-success" />
@@ -41,7 +41,7 @@ export default function EntryPage() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/manager')}>
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/mobile/login')}>
           <CardContent className="p-6 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-status-pending/10 flex items-center justify-center shrink-0">
               <Smartphone className="w-6 h-6 text-status-pending" />

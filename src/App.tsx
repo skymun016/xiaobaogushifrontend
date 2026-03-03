@@ -32,7 +32,7 @@ import ManagerApplications from "./pages/manager/ManagerApplications";
 import ManagerIssues from "./pages/manager/ManagerIssues";
 import ManagerDelivery from "./pages/manager/ManagerDelivery";
 import ManagerProfile from "./pages/manager/ManagerProfile";
-
+import MobileLogin from "./pages/mobile/MobileLogin";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -61,6 +61,9 @@ const App = () => (
             <Route path="settings" element={<SettingsCenter />} />
             <Route path="miniprogram" element={<MiniProgramCenter />} />
           </Route>
+
+          {/* Mobile login */}
+          <Route path="/mobile/login" element={<MobileLogin />} />
 
           {/* Store mobile */}
           <Route path="/store" element={<MobileLayout />}>

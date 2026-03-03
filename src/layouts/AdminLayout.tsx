@@ -7,6 +7,7 @@ import {
   DollarSign, Bell, Settings, ChevronLeft, ChevronRight, LogOut, Menu
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import ThemeSwitcher from '@/components/ThemeSwitcher';
 
 const navItems = [
   { label: '工作台', icon: LayoutDashboard, path: '/admin' },
@@ -125,9 +126,10 @@ export default function AdminLayout() {
             <Menu className="w-5 h-5" />
           </Button>
           <div className="flex-1" />
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground hidden sm:inline">
             {new Date().toLocaleDateString('zh-CN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </span>
+          <ThemeSwitcher />
         </header>
 
         {/* Content */}

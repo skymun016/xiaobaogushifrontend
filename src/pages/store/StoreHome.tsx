@@ -2,12 +2,10 @@ import { mockProducts, getOrderTimeHint, isOrderTime } from '@/mock/data';
 import { useCartStore } from '@/lib/store';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, Clock, Plus, Package, ChevronRight } from 'lucide-react';
+import { ShoppingCart, Clock, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import ProductImage from '@/components/ProductImage';
-
-const categories = [...new Set(mockProducts.map(p => p.categoryName))];
 
 export default function StoreHome() {
   const { addItem } = useCartStore();
@@ -33,33 +31,11 @@ export default function StoreHome() {
         </div>
       </div>
 
-      {/* Categories */}
-      <div className="p-4 -mt-3">
-        <div className="bg-card rounded-xl p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold">商品分类</h2>
-            <Link to="/store/categories" className="text-xs text-primary flex items-center">
-              全部 <ChevronRight className="w-3 h-3" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-4 gap-3">
-            {categories.slice(0, 8).map(cat => (
-              <Link key={cat} to="/store/categories" className="flex flex-col items-center gap-1">
-                <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center">
-                  <Package className="w-5 h-5 text-muted-foreground" />
-                </div>
-                <span className="text-xs">{cat}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Hot products */}
-      <div className="px-4 pb-4">
-        <h2 className="text-sm font-semibold mb-3">热门商品</h2>
+      {/* All products */}
+      <div className="px-4 pb-4 -mt-3">
+        <h2 className="text-sm font-semibold mb-3">全部商品</h2>
         <div className="space-y-2">
-          {mockProducts.slice(0, 6).map(product => (
+          {mockProducts.filter(p => p.isOnSale).map(product => (
             <Card key={product.id} className="overflow-hidden">
               <CardContent className="p-3 flex gap-3">
                 <ProductImage productId={product.id} className="w-16 h-16 shrink-0" iconSize="w-8 h-8" />

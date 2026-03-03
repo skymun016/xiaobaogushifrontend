@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockOrders } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,7 +44,7 @@ export default function OrderDetail() {
               <span className="text-xs bg-status-pending-bg text-status-pending px-2 py-0.5 rounded-full font-medium">申请订货</span>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">{order.storeName} · {order.createdAt}</p>
+          <p className="text-sm text-muted-foreground">{order.storeName} · {formatDateWithDay(order.createdAt)}</p>
         </div>
         <div className="flex gap-2">
           {order.status === OrderStatus.PENDING && order.paymentStatus === PaymentStatus.PAID && (
@@ -182,7 +183,7 @@ export default function OrderDetail() {
                       <p className="text-sm font-medium">{event.title}</p>
                       {event.description && <p className="text-xs text-muted-foreground">{event.description}</p>}
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {event.time} {event.operator && `· ${event.operator}`}
+                        {formatDateWithDay(event.time)} {event.operator && `· ${event.operator}`}
                       </p>
                     </div>
                   </div>

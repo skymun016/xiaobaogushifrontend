@@ -1,4 +1,5 @@
 import { mockOrders } from '@/mock/data';
+import { formatDateWithDay } from '@/lib/utils';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
@@ -59,7 +60,7 @@ export default function StoreOrders() {
                         )}
                       </div>
                       <div className="flex justify-between items-center mt-3 pt-2 border-t">
-                        <span className="text-xs text-muted-foreground">{order.createdAt}</span>
+                        <span className="text-xs text-muted-foreground">{formatDateWithDay(order.createdAt)}</span>
                         <span className="text-sm font-bold">合计 ¥{order.totalSalePrice.toFixed(2)}</span>
                       </div>
                     </CardContent>

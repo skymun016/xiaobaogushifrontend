@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockPaymentRecords, mockRefunds, mockRevenueData, mockProfitByProduct, mockProfitByStore } from '@/mock/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -106,7 +107,7 @@ export default function FinanceCenter() {
                           {p.status === 'success' ? '成功' : '已退款'}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">{p.paidAt}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(p.paidAt)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -143,8 +144,8 @@ export default function FinanceCenter() {
                           {r.status === 'completed' ? '已完成' : '处理中'}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">{r.createdAt}</TableCell>
-                      <TableCell className="text-muted-foreground text-sm">{r.completedAt || '-'}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(r.createdAt)}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">{r.completedAt ? formatDateWithDay(r.completedAt) : '-'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

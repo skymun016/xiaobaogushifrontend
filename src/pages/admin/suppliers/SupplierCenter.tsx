@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockSuppliers, mockProducts } from '@/mock/data';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -167,7 +168,7 @@ export default function SupplierCenter() {
                 ['地址', detail.address],
                 ['状态', detail.status === 'active' ? '合作中' : '已停用'],
                 ['供应商品数', `${detail.productCount}`],
-                ['创建时间', detail.createdAt],
+                ['创建时间', formatDateWithDay(detail.createdAt)],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between text-sm p-2 bg-muted rounded">
                   <span className="text-muted-foreground">{k}</span>

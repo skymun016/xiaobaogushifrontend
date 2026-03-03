@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockPurchaseOrders, mockOrders, mockProducts } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -89,7 +90,7 @@ export default function ProcurementCenter() {
                         <TableCell>{o.storeName}</TableCell>
                         <TableCell>{o.items.length}</TableCell>
                         <TableCell>¥{o.totalCostPrice.toFixed(2)}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm">{o.createdAt}</TableCell>
+                        <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(o.createdAt)}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">
                             <Button size="sm" variant="outline" onClick={() => setShowSplitDetail(o.id)}>
@@ -244,7 +245,7 @@ export default function ProcurementCenter() {
                     <div key={i}>
                       <p className="text-sm font-medium">{t.title}</p>
                       {t.description && <p className="text-xs text-muted-foreground">{t.description}</p>}
-                      <p className="text-xs text-muted-foreground">{t.time}</p>
+                      <p className="text-xs text-muted-foreground">{formatDateWithDay(t.time)}</p>
                     </div>
                   ))}
                 </div>

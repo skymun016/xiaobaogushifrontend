@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { mockOrders } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -111,7 +112,7 @@ export default function OrderList() {
                             {order.auditStatus && <StatusBadge status={order.auditStatus} />}
                           </TableCell>
                         )}
-                        <TableCell className="text-muted-foreground text-sm">{order.createdAt}</TableCell>
+                        <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(order.createdAt)}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">
                             <Button variant="ghost" size="sm" asChild>

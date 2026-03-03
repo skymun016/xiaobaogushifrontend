@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockSystemUsers, mockSystemRoles, mockAuditLogs } from '@/mock/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -174,7 +175,7 @@ export default function SettingsCenter() {
                       <TableCell>{l.target}</TableCell>
                       <TableCell className="text-muted-foreground text-sm max-w-xs truncate">{l.detail}</TableCell>
                       <TableCell className="text-muted-foreground font-mono text-xs">{l.ip}</TableCell>
-                      <TableCell className="text-muted-foreground text-sm">{l.createdAt}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(l.createdAt)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

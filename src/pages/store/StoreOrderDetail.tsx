@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockOrders } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -54,7 +55,7 @@ export default function StoreOrderDetail() {
                   )}
                   <p className="text-sm font-medium">{event.title}</p>
                   {event.description && <p className="text-xs text-muted-foreground">{event.description}</p>}
-                  <p className="text-xs text-muted-foreground">{event.time}</p>
+                  <p className="text-xs text-muted-foreground">{formatDateWithDay(event.time)}</p>
                 </div>
               ))}
             </div>
@@ -96,7 +97,7 @@ export default function StoreOrderDetail() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">下单时间</span>
-              <span>{order.createdAt}</span>
+              <span>{formatDateWithDay(order.createdAt)}</span>
             </div>
           </CardContent>
         </Card>

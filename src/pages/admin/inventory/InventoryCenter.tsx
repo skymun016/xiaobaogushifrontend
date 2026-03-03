@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockProducts, mockInventoryRecords } from '@/mock/data';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -119,7 +120,7 @@ export default function InventoryCenter() {
                       <TableCell className="text-muted-foreground text-xs">{r.skuCode}</TableCell>
                       <TableCell className="text-right text-status-success font-medium">+{r.quantity}{r.unit}</TableCell>
                       <TableCell>{r.operator}</TableCell>
-                      <TableCell className="text-muted-foreground text-sm">{r.createdAt}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(r.createdAt)}</TableCell>
                       <TableCell className="text-muted-foreground text-sm">{r.remark}</TableCell>
                     </TableRow>
                   ))}
@@ -154,7 +155,7 @@ export default function InventoryCenter() {
                       <TableCell className="text-right text-status-error font-medium">-{r.quantity}{r.unit}</TableCell>
                       <TableCell className="text-primary text-sm">{r.relatedOrderNo}</TableCell>
                       <TableCell>{r.operator}</TableCell>
-                      <TableCell className="text-muted-foreground text-sm">{r.createdAt}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(r.createdAt)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

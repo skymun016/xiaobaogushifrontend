@@ -1,4 +1,5 @@
 import { mockFulfillmentTasks } from '@/mock/data';
+import { formatDateWithDay } from '@/lib/utils';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -67,9 +68,9 @@ export default function ManagerDelivery() {
               )}
 
               <div className="flex gap-2 text-xs text-muted-foreground mt-2">
-                {task.pickedAt && <span>拣货: {task.pickedAt.slice(5, 16)}</span>}
-                {task.shippedAt && <span>· 发货: {task.shippedAt.slice(5, 16)}</span>}
-                {task.receivedAt && <span>· 签收: {task.receivedAt.slice(5, 16)}</span>}
+                {task.pickedAt && <span>拣货: {formatDateWithDay(task.pickedAt)}</span>}
+                {task.shippedAt && <span>· 发货: {formatDateWithDay(task.shippedAt)}</span>}
+                {task.receivedAt && <span>· 签收: {formatDateWithDay(task.receivedAt)}</span>}
               </div>
             </CardContent>
           </Card>

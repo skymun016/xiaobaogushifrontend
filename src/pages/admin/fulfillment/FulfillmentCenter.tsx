@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { formatDateWithDay } from '@/lib/utils';
 import { mockFulfillmentTasks } from '@/mock/data';
 import { StatusBadge } from '@/components/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -76,7 +77,7 @@ export default function FulfillmentCenter() {
                         <TableCell>{t.items.length}</TableCell>
                         <TableCell><StatusBadge status={t.status} /></TableCell>
                         <TableCell>{t.operator || '-'}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm">{t.createdAt}</TableCell>
+                        <TableCell className="text-muted-foreground text-sm">{formatDateWithDay(t.createdAt)}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">
                             {t.status === FulfillmentStatus.PICKING && (

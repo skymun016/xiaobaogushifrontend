@@ -40,7 +40,7 @@ export default function AdminLayout() {
       collapsed ? 'w-16' : 'w-60'
     )}>
       {/* Logo */}
-      <div className="flex items-center h-16 px-4 border-b border-sidebar-border">
+      <div className="flex items-center h-14 px-4">
         {!collapsed && (
           <h1 className="text-lg font-bold text-sidebar-foreground tracking-tight">
             小堡故事订货管理系统
@@ -70,7 +70,7 @@ export default function AdminLayout() {
       </nav>
 
       {/* User */}
-      <div className="p-4 border-t border-sidebar-border">
+      <div className="p-4">
         <div className={cn('flex items-center', collapsed ? 'justify-center' : 'gap-3')}>
           <div className="w-8 h-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-sm font-medium shrink-0">
             {userName?.[0] || 'A'}

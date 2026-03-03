@@ -23,8 +23,8 @@ export default function StoreHome() {
 
   return (
     <div className="bg-muted min-h-full">
-      {/* Header */}
-      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-8 sticky top-0 z-20">
+      {/* Fixed Header */}
+      <div className="bg-primary text-primary-foreground px-4 pt-4 pb-4 sticky top-0 z-20">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-lg font-bold tracking-tight">宿迁总店</h1>
@@ -41,23 +41,21 @@ export default function StoreHome() {
         </div>
 
         {/* Time hint */}
-        <div className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-3 text-xs">
+        <div className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl p-3 text-xs mb-3">
           <div className="w-7 h-7 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0">
             <Clock className="w-3.5 h-3.5" />
           </div>
           <span className="leading-relaxed">{getOrderTimeHint()}</span>
         </div>
-      </div>
 
-      {/* Search bar - overlapping header */}
-      <div className="px-4 -mt-4">
+        {/* Search bar */}
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="搜索商品名称..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="pl-10 h-10 rounded-xl bg-card shadow-sm border-0 text-sm"
+            className="pl-10 h-10 rounded-xl bg-primary-foreground/15 shadow-sm border-0 text-sm text-primary-foreground placeholder:text-primary-foreground/40"
           />
         </div>
       </div>
